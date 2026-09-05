@@ -15,6 +15,7 @@ import {
   Glow,
 } from "@/components/brand/Brand";
 import { ContactCTA } from "@/components/sections/Sections";
+import { ProjectCover } from "@/components/sections/ProjectCover";
 import { site } from "@/lib/site";
 
 export function generateStaticParams() {
@@ -67,7 +68,16 @@ export default async function ProjectPage({
 
   const facts = [
     { label: dict.projects.fields.role, value: project.role },
-    { label: dict.projects.fields.year, value: project.year },
+    {
+      label: dict.projects.fields.period,
+      value: project.period ?? project.year,
+    },
+    ...(project.client
+      ? [{ label: dict.projects.fields.client, value: project.client }]
+      : []),
+    ...(project.context
+      ? [{ label: dict.projects.fields.context, value: project.context }]
+      : []),
     { label: dict.projects.fields.focus, value: copy.focus },
   ];
 
@@ -77,7 +87,7 @@ export default async function ProjectPage({
         <Trace opacity={0.3} />
         <Glow
           tone="blue"
-          className="-left-40 -top-48 h-[440px] w-[600px] opacity-45"
+          className="-left-40 -top-48 h-110 w-150 opacity-45"
         />
 
         <Container className="relative">
@@ -110,139 +120,143 @@ export default async function ProjectPage({
             <Rule className="mt-8" />
           </div>
 
-          <div className="mt-12 grid gap-12 lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)] lg:gap-16">
-            <div className="space-y-10">
-              <p className="max-w-prose text-[17px] leading-relaxed text-text">
-                {copy.summary}
-              </p>
+          <ProjectCover project={project} priority className="mt-10" />
 
-              {project.architecture && (
-                <div>
-                  <h2 className="font-mono text-[11px] uppercase tracking-[0.16em] text-faint">
-                    {dict.projects.fields.architecture}
-                  </h2>
-                  <div className="mt-4 overflow-x-auto rounded-lg border border-line bg-surface/60 p-5">
-                    <ol className="flex min-w-max items-center gap-2.5">
-                      {project.architecture.map((node, i) => (
-                        <li
-                          key={node.name}
-                          className="flex items-center gap-2.5"
+          <Card className="mt-8">
+            <dl className="grid gap-x-8 gap-y-6 sm:grid-cols-2 lg:grid-cols-4">
+              {facts.map((f) => (
+                <div key={f.label}>
+                  <dt className="font-mono text-[11px] uppercase tracking-[0.14em] text-faint">
+                    {f.label}
+                  </dt>
+                  <dd className="mt-1 text-[15px] text-text">{f.value}</dd>
+                </div>
+              ))}
+            </dl>
+          </Card>
+
+          <div className="mt-12 max-w-3xl space-y-10">
+            <p className="max-w-prose text-[17px] leading-relaxed text-text">
+              {copy.summary}
+            </p>
+
+            {copy.sections && copy.sections.length > 0 && (
+              <div className="space-y-10">
+                <Separator />
+                {copy.sections.map((s) => (
+                  <section key={s.step} aria-labelledby={`case-${s.step}`}>
+                    <p className="font-mono text-[11px] tabular-nums tracking-[0.16em] text-primary-text">
+                      {s.step}
+                    </p>
+                    <h2
+                      id={`case-${s.step}`}
+                      className="mt-2 font-display text-2xl font-bold"
+                    >
+                      {s.title}
+                    </h2>
+                    <div className="mt-3 space-y-3">
+                      {s.body.map((p) => (
+                        <p
+                          key={p.slice(0, 24)}
+                          className="max-w-prose text-[16px] leading-relaxed text-muted"
                         >
-                          <ArchBlock
-                            name={node.name}
-                            kind={node.kind}
-                            active={i === 1}
-                          />
-                          {i < project.architecture!.length - 1 && (
-                            <span className="flex w-8 items-center gap-1.5">
-                              <Connection />
-                              <span
-                                aria-hidden="true"
-                                className="text-xs text-faint"
-                              >
-                                ▸
-                              </span>
-                            </span>
-                          )}
-                        </li>
+                          {p}
+                        </p>
                       ))}
-                    </ol>
-                  </div>
-                </div>
-              )}
+                    </div>
+                  </section>
+                ))}
+              </div>
+            )}
 
-              {copy.sections && copy.sections.length > 0 && (
-                <div className="space-y-10">
-                  <Separator />
-                  {copy.sections.map((s) => (
-                    <section key={s.step} aria-labelledby={`case-${s.step}`}>
-                      <p className="font-mono text-[11px] tabular-nums tracking-[0.16em] text-primary-text">
-                        {s.step}
-                      </p>
-                      <h2
-                        id={`case-${s.step}`}
-                        className="mt-2 font-display text-2xl font-bold"
-                      >
-                        {s.title}
-                      </h2>
-                      <div className="mt-3 space-y-3">
-                        {s.body.map((p) => (
-                          <p
-                            key={p.slice(0, 24)}
-                            className="max-w-prose text-[16px] leading-relaxed text-muted"
-                          >
-                            {p}
-                          </p>
-                        ))}
-                      </div>
-                    </section>
-                  ))}
+            {project.architecture && (
+              <div>
+                <h2 className="font-mono text-[11px] uppercase tracking-[0.16em] text-faint">
+                  {dict.projects.fields.architecture}
+                </h2>
+                <div className="mt-4 overflow-x-auto rounded-lg border border-line bg-surface/60 p-5">
+                  <ol className="flex min-w-max items-center gap-2.5">
+                    {project.architecture.map((node, i) => (
+                      <li key={node.name} className="flex items-center gap-2.5">
+                        <ArchBlock
+                          name={node.name}
+                          kind={node.kind}
+                          active={i === 1}
+                        />
+                        {i < project.architecture!.length - 1 && (
+                          <span className="flex w-8 items-center gap-1.5">
+                            <Connection />
+                            <span aria-hidden="true" className="text-xs text-faint">
+                              ▸
+                            </span>
+                          </span>
+                        )}
+                      </li>
+                    ))}
+                  </ol>
                 </div>
-              )}
+              </div>
+            )}
 
-              {project.metrics && project.metrics.length > 0 && (
-                <div className="grid gap-6 border-y border-line py-8 sm:grid-cols-3">
-                  {project.metrics.map((m, i) => (
-                    <Metric key={m.label} {...m} gradient={i === 0} />
-                  ))}
-                </div>
-              )}
-            </div>
+            {project.metrics && project.metrics.length > 0 && (
+              <div className="grid gap-6 border-y border-line py-8 sm:grid-cols-3">
+                {project.metrics.map((m, i) => (
+                  <Metric key={m.label} {...m} gradient={i === 0} />
+                ))}
+              </div>
+            )}
 
-            <aside className="space-y-6">
-              <Card>
-                <dl className="space-y-4">
-                  {facts.map((f) => (
-                    <div key={f.label}>
-                      <dt className="font-mono text-[11px] uppercase tracking-[0.14em] text-faint">
-                        {f.label}
+            {project.stackDetail && project.stackDetail.length > 0 ? (
+              <div>
+                <h2 className="font-mono text-[11px] uppercase tracking-[0.16em] text-faint">
+                  {dict.projects.fields.stack}
+                </h2>
+                <dl className="mt-4 grid gap-4 sm:grid-cols-2">
+                  {project.stackDetail.map((s) => (
+                    <div
+                      key={s.name}
+                      className="rounded-lg border border-line bg-surface/60 p-4"
+                    >
+                      <dt className="font-display text-sm font-semibold text-text-strong">
+                        {s.name}
                       </dt>
-                      <dd className="mt-1 text-[15px] text-text">{f.value}</dd>
+                      <dd className="mt-1 text-sm leading-relaxed text-muted">
+                        {s.role}
+                      </dd>
                     </div>
                   ))}
-                  <div>
-                    <dt className="font-mono text-[11px] uppercase tracking-[0.14em] text-faint">
-                      {dict.projects.fields.stack}
-                    </dt>
-                    <dd className="mt-2.5">
-                      <ul className="flex flex-wrap gap-1.5">
-                        {project.stack.map((s) => (
-                          <li key={s}>
-                            <Tag size="sm">{s}</Tag>
-                          </li>
-                        ))}
-                      </ul>
-                    </dd>
-                  </div>
                 </dl>
-              </Card>
-
-              <div className="flex flex-col gap-3">
-                {project.repo && (
-                  <Button
-                    href={project.repo}
-                    variant="ghost"
-                    size="sm"
-                    external
-                  >
-                    {dict.projects.viewRepo}
-                  </Button>
-                )}
-                {project.demo && (
-                  <Button
-                    href={project.demo}
-                    variant="ghost"
-                    size="sm"
-                    external
-                  >
-                    {dict.projects.viewDemo}
-                  </Button>
-                )}
-                <Button href={`mailto:${site.email}`} variant="quiet" size="sm">
-                  {site.email}
-                </Button>
               </div>
-            </aside>
+            ) : (
+              <div>
+                <h2 className="font-mono text-[11px] uppercase tracking-[0.16em] text-faint">
+                  {dict.projects.fields.stack}
+                </h2>
+                <ul className="mt-4 flex flex-wrap gap-1.5" aria-label={dict.projects.fields.stack}>
+                  {project.stack.map((s) => (
+                    <li key={s}>
+                      <Tag size="sm">{s}</Tag>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            <div className="flex flex-wrap items-center gap-3 border-t border-line pt-8">
+              {project.repo && (
+                <Button href={project.repo} variant="ghost" size="sm" external>
+                  {dict.projects.viewRepo}
+                </Button>
+              )}
+              {project.demo && (
+                <Button href={project.demo} variant="ghost" size="sm" external>
+                  {dict.projects.viewDemo}
+                </Button>
+              )}
+              <Button href={`mailto:${site.email}`} variant="quiet" size="sm">
+                {site.email}
+              </Button>
+            </div>
           </div>
 
           {others.length > 0 && (

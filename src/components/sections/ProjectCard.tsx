@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Card } from "@/components/ui/Card";
 import { Tag } from "@/components/ui/Tag";
+import { ProjectCover } from "@/components/sections/ProjectCover";
 import { cn } from "@/lib/utils";
 import type { Locale } from "@/lib/i18n";
 import type { Dictionary, Project } from "@/content/types";
@@ -25,6 +26,8 @@ export function ProjectCard({
 
   return (
     <Card as="article" interactive className="group flex h-full flex-col gap-4">
+      <ProjectCover project={project} />
+
       <div className="flex items-start justify-between gap-4">
         <span
           className={cn(

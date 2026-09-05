@@ -5,7 +5,7 @@
  */
 export const site = {
   url: "https://danieltiomela.com",
-  name: "Daniel Tiomela",
+  name: "Daniel TIOMELA",
   role: "Software Engineer",
   email: "danieltiomelajou@gmail.com",
   location: "Yaoundé, Cameroon",
@@ -14,16 +14,23 @@ export const site = {
     github: "https://github.com/danieljou",
     linkedin: "https://www.linkedin.com/in/daniel-tiomela-jou-40250b279/",
   },
+  /**
+   * Expected at this path in `public/`  not present yet. Until the file is
+   * added, the download button on /cv links here and 404s. See the /cv
+   * page's own note in the codebase for what to drop in and where.
+   */
+  cvPdfPath: "/Daniel-Tiomela-Jou-Software-Engineer.pdf",
   /** The house order. Never reshuffled  consistency is the point. */
   stack: [
     "Python",
     "Django",
-    "React",
+    "PostgreSQL / PostGIS",
     "Next.js",
     "TypeScript",
-    "Docker",
     "Kubernetes",
-    "PostgreSQL",
+    "Docker",
+    "React",
+    "GeoServer",
   ],
 } as const;
 

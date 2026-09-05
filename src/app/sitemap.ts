@@ -4,7 +4,15 @@ import { projects } from "@/content/projects";
 import { site, features } from "@/lib/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const pages = ["", "/about", "/projects", "/contact", ...(features.blog ? ["/blog"] : [])];
+  const pages = [
+    "",
+    "/about",
+    "/projects",
+    "/stack",
+    "/cv",
+    "/contact",
+    ...(features.blog ? ["/blog"] : []),
+  ];
   const now = new Date();
 
   const entries: MetadataRoute.Sitemap = [];

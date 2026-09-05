@@ -8,6 +8,35 @@ import { site } from "@/lib/site";
 import type { Locale } from "@/lib/i18n";
 import type { Dictionary } from "@/content/types";
 
+/* ── Ready now  three concrete, CV-grounded axes ──────────────────────── */
+export function ReadyNow({ dict }: { dict: Dictionary }) {
+  return (
+    <Section labelledBy="ready-now-title">
+      <Container>
+        <SectionHeader
+          id="ready-now-title"
+          label={dict.readyNow.label}
+          title={dict.readyNow.title}
+          kicker={dict.readyNow.kicker}
+        />
+        <ul className="mt-12 grid gap-4 sm:grid-cols-3">
+          {dict.readyNow.items.map((item, i) => (
+            <li key={item.title}>
+              <Card className="h-full" marked>
+                <p className="font-mono text-[11px] tabular-nums tracking-[0.16em] text-primary-text">
+                  {String(i + 1).padStart(2, "0")}
+                </p>
+                <h3 className="mt-3 font-display text-lg font-semibold">{item.title}</h3>
+                <p className="mt-2.5 text-[15px] leading-relaxed text-muted">{item.body}</p>
+              </Card>
+            </li>
+          ))}
+        </ul>
+      </Container>
+    </Section>
+  );
+}
+
 /* ── Engineering principles ─────────────────────────────────────────────── */
 export function Principles({ dict }: { dict: Dictionary }) {
   return (
@@ -132,6 +161,7 @@ export function SystemsDiagram({ dict }: { dict: Dictionary }) {
 export function StackSection({ dict }: { dict: Dictionary }) {
   const groups = [
     { title: dict.stack.core, items: dict.stack.coreItems, primary: true },
+    { title: dict.stack.geospatial, items: dict.stack.geospatialItems, primary: true },
     { title: dict.stack.infrastructure, items: dict.stack.infrastructureItems },
     { title: dict.stack.additional, items: dict.stack.additionalItems },
   ];
@@ -178,37 +208,46 @@ export function Certifications({ dict }: { dict: Dictionary }) {
           title={dict.certifications.title}
           kicker={dict.certifications.kicker}
         />
-        <div className="mt-10 overflow-x-auto">
-          <table className="w-full min-w-[34rem] border-collapse text-left text-sm">
-            <thead>
-              <tr className="border-b border-line">
-                {[
-                  dict.certifications.columns.name,
-                  dict.certifications.columns.provider,
-                  dict.certifications.columns.date,
-                ].map((c) => (
-                  <th
-                    key={c}
-                    scope="col"
-                    className="pb-3 pr-4 font-mono text-[11px] font-medium uppercase tracking-[0.13em] text-muted"
-                  >
-                    {c}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {dict.certifications.items.map((c) => (
-                <tr key={c.name} className="border-b border-line/55">
-                  <td className="py-3.5 pr-4 text-text">{c.name}</td>
-                  <td className="py-3.5 pr-4 text-muted">{c.provider}</td>
-                  <td className="whitespace-nowrap py-3.5 tabular-nums text-muted">
-                    {c.date}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        <div className="mt-10 space-y-10">
+          {dict.certifications.groups.map((group) => (
+            <div key={group.title}>
+              <h3 className="font-mono text-[11px] uppercase tracking-[0.16em] text-faint">
+                {group.title}
+              </h3>
+              <div className="mt-4 overflow-x-auto">
+                <table className="w-full min-w-[34rem] border-collapse text-left text-sm">
+                  <thead>
+                    <tr className="border-b border-line">
+                      {[
+                        dict.certifications.columns.name,
+                        dict.certifications.columns.provider,
+                        dict.certifications.columns.date,
+                      ].map((c) => (
+                        <th
+                          key={c}
+                          scope="col"
+                          className="pb-3 pr-4 font-mono text-[11px] font-medium uppercase tracking-[0.13em] text-muted"
+                        >
+                          {c}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {group.items.map((c) => (
+                      <tr key={c.name} className="border-b border-line/55">
+                        <td className="py-3.5 pr-4 text-text">{c.name}</td>
+                        <td className="py-3.5 pr-4 text-muted">{c.provider}</td>
+                        <td className="whitespace-nowrap py-3.5 tabular-nums text-muted">
+                          {c.date}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          ))}
         </div>
         <a
           href={`${site.links.linkedin}details/certifications/`}

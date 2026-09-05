@@ -27,6 +27,18 @@ export interface Project {
   architecture?: ArchNode[];
   /** Only rendered when a real, verifiable figure exists. */
   metrics?: { value: string; label: string; note?: string }[];
+  /** "12/2025  03/2026"  the full engagement span, for the facts panel. */
+  period?: string;
+  /** Real or anonymised  "SIC (HORIZON)" vs "a national real-estate company". */
+  client?: string;
+  /** Short team-shape note  "Solo" vs "Led a 4-person delivery team". */
+  team?: string;
+  /** One line of situational context, shown in the facts panel. */
+  context?: string;
+  /** Cover image. Optional  the page renders a brand fallback without it. */
+  cover?: { src: string; alt: string };
+  /** Same tools as `stack`, each with the job it actually did on this project. */
+  stackDetail?: { name: string; role: string }[];
   i18n: Record<
     Locale,
     {
@@ -51,6 +63,8 @@ export interface Dictionary {
     about: string;
     projects: string;
     blog: string;
+    cv: string;
+    uses: string;
     contact: string;
     skipToContent: string;
     menu: string;
@@ -65,6 +79,14 @@ export interface Dictionary {
     ctaPrimary: string;
     ctaSecondary: string;
     availability: string;
+    /** Timezone overlap and reply time  the first objection to remote hiring. */
+    availabilityDetail: string;
+  };
+  readyNow: {
+    label: string;
+    title: string;
+    kicker: string;
+    items: { title: string; body: string }[];
   };
   about: {
     label: string;
@@ -98,6 +120,8 @@ export interface Dictionary {
     kicker: string;
     core: string;
     coreItems: string[];
+    geospatial: string;
+    geospatialItems: string[];
     infrastructure: string;
     infrastructureItems: string[];
     additional: string;
@@ -118,6 +142,9 @@ export interface Dictionary {
     fields: {
       role: string;
       year: string;
+      period: string;
+      client: string;
+      context: string;
       stack: string;
       focus: string;
       architecture: string;
@@ -129,7 +156,11 @@ export interface Dictionary {
     kicker: string;
     columns: { name: string; provider: string; date: string };
     viewAll: string;
-    items: { name: string; provider: string; date: string }[];
+    /** Grouped the way the CV itself groups them  never re-sorted flat. */
+    groups: {
+      title: string;
+      items: { name: string; provider: string; date: string }[];
+    }[];
   };
   blog: {
     label: string;
@@ -173,6 +204,32 @@ export interface Dictionary {
     builtWith: string;
     rights: string;
     backToTop: string;
+  };
+  cv: {
+    label: string;
+    title: string;
+    kicker: string;
+    downloadCta: string;
+    skillsTitle: string;
+    skillGroups: { title: string; items: string[] }[];
+    experienceTitle: string;
+    personalProjectsTitle: string;
+    educationTitle: string;
+    education: { degree: string; school: string; period: string; note: string }[];
+    /** The one real role that predates every project in `projects.ts`. */
+    priorRole: {
+      title: string;
+      org: string;
+      period: string;
+      summary: string;
+      stack: string[];
+    };
+  };
+  uses: {
+    label: string;
+    title: string;
+    kicker: string;
+    items: { name: string; why: string }[];
   };
   errors: {
     notFound: { title: string; body: string; cta: string };

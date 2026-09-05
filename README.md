@@ -1,6 +1,6 @@
 # danieltiomela.com
 
-Personal site of **Daniel Tiomela Jou** Full Stack & DevOps engineer, Yaoundé.
+Personal site of **Daniel TIOMELA JOU** Full Stack & DevOps engineer, Yaoundé.
 Bilingual (EN/FR), statically rendered, built on the brand system v1.1.
 
 ---

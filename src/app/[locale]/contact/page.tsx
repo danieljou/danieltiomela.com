@@ -108,7 +108,7 @@ export default async function ContactPage({
                       rel="noreferrer noopener"
                       className="text-secondary-text transition-colors duration-200 hover:text-secondary"
                     >
-                      Daniel Tiomela Jou
+                      Daniel TIOMELA JOU
                     </a>
                   </dd>
                 </div>

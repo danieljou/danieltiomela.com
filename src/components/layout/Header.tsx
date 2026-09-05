@@ -24,6 +24,8 @@ export function Header({ locale, dict }: { locale: Locale; dict: Dictionary }) {
     ...(features.blog
       ? [{ href: `/${locale}/blog`, label: dict.nav.blog }]
       : []),
+    { href: `/${locale}/stack`, label: dict.nav.uses },
+    { href: `/${locale}/cv`, label: dict.nav.cv },
     { href: `/${locale}/contact`, label: dict.nav.contact },
   ];
 

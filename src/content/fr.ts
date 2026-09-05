@@ -2,7 +2,7 @@ import type { Dictionary } from "./types";
 
 export const fr: Dictionary = {
   meta: {
-    title: "Daniel Tiomela  Ingénieur logiciel",
+    title: "Daniel TIOMELA  Ingénieur logiciel",
     description:
       "Ingénieur logiciel. Je construis des applications web modernes, des API qui tiennent la charge et l'infrastructure qui les fait tourner. Full stack et DevOps, basé à Yaoundé, en remote.",
     keywords: [
@@ -12,6 +12,9 @@ export const fr: Dictionary = {
       "React",
       "Next.js",
       "DevOps",
+      "Kubernetes",
+      "Géospatial",
+      "PostGIS",
       "Remote",
       "Cameroun",
     ],
@@ -22,6 +25,8 @@ export const fr: Dictionary = {
     about: "À propos",
     projects: "Projets",
     blog: "Écrits",
+    cv: "CV",
+    uses: "Stack",
     contact: "Contact",
     skipToContent: "Aller au contenu principal",
     menu: "Ouvrir le menu",
@@ -31,12 +36,34 @@ export const fr: Dictionary = {
 
   hero: {
     eyebrow: "Ingénieur logiciel · Full Stack & DevOps",
-    name: "Daniel Tiomela",
+    name: "Daniel TIOMELA",
     role: "Ingénieur logiciel",
     lede: "Je construis des applications web modernes, des API qui tiennent la charge et l'infrastructure qui les fait tourner  du modèle de données jusqu'à la mise en production.",
     ctaPrimary: "Voir mes projets",
     ctaSecondary: "Me contacter",
     availability: "Ouvert aux postes en remote, partout",
+    availabilityDetail:
+      "UTC+1 - chevauche l'essentiel de la journée de travail avec l'Europe, les matinées avec les Amériques. Je réponds sous 24 heures.",
+  },
+
+  readyNow: {
+    label: "Disponible maintenant",
+    title: "Où je peux être utile tout de suite",
+    kicker: "Trois choses que j'ai réellement livrées en production, pas une liste de souhaits.",
+    items: [
+      {
+        title: "Backend à l'échelle",
+        body: "Des API Django et DRF pensées comme des contrats avant que les endpoints existent : authentification, logique métier et modélisation des données, construites pour être maintenues par quelqu'un d'autre que moi.",
+      },
+      {
+        title: "Plateformes de données géospatiales",
+        body: "PostGIS, GeoServer, Elasticsearch et API cartographiques - transformer la donnée de localisation en recherche, cartographie et reporting réellement utilisés, sur cinq systèmes en production.",
+      },
+      {
+        title: "Déploiement & infrastructure",
+        body: "Docker, Kubernetes et CI/CD GitLab de la préproduction à la production, jusqu'à la mise en place d'infrastructure sur site dans un datacenter national, pas seulement un cloud managé.",
+      },
+    ],
   },
 
   about: {
@@ -44,15 +71,20 @@ export const fr: Dictionary = {
     title: "Je porte les choses jusqu'en production",
     lede: "Le merge, c'est le milieu du travail, pas la fin.",
     paragraphs: [
-      "Je travaille sur toute la chaîne  interfaces frontend, architecture backend, et l'infrastructure qui met les deux en production. La plupart de ce que je construis doit tourner pendant des années et être maintenu par quelqu'un d'autre que moi.",
-      "Ça change la façon de coder. Je préfère une architecture claire à une solution astucieuse, parce que le code astucieux est une dette que quelqu'un paie plus tard. J'écris les décisions avant qu'on en débatte. Et je préfère accompagner une fonctionnalité jusqu'au déploiement et rester dessus ensuite, plutôt que de la passer au moment de la revue.",
-      "La partie du métier qui m'intéresse le plus, c'est la deuxième livraison du même message  les retries, les rejeux, les événements en double. Concevoir pour ce cas-là avant le chemin nominal, c'est ce qui sépare un système qui résiste aux vrais utilisateurs d'un système qu'il faut surveiller.",
+      "Je suis basé à Yaoundé, au Cameroun, et formé comme ingénieur logiciel à l'IAI Yaoundé (un diplôme d'ingénieur des travaux informatiques et une licence en génie logiciel, tous deux obtenus avec mention Bien). L'essentiel de ce que j'ai construit depuis a été pour des clients institutionnels : une société immobilière nationale, des programmes d'observatoires numériques gouvernementaux en Afrique de l'Ouest et Centrale, et des autorités municipales gérant leurs propres données. Ce travail arrive rarement avec un cahier des charges fiable : il arrive avec un système existant, un client qui connaît le problème mieux que la technologie, et un délai fixé par le cycle budgétaire de quelqu'un d'autre.",
+      "J'ai piloté trois de ces missions de bout en bout - architecture, livraison, et le travail sur site de mise en place de l'infrastructure directement dans le datacenter du client plutôt que dans un cloud managé. Cela incluait la formation des personnes qui allaient réellement faire tourner le système après mon départ, et la rédaction de la documentation pour que le prochain ingénieur n'ait pas besoin de m'appeler. Je suis actuellement Architecte Logiciel Junior et ingénieur DevOps, ce qui veut dire en pratique autant de temps sur des manifests Kubernetes et des standards de revue de code que sur du code applicatif.",
+      "Une bonne partie de ce travail s'est révélée géospatiale - PostGIS, GeoServer, Elasticsearch, API cartographiques - parce que la plupart des systèmes qu'on m'a demandé de construire avaient une localisation en leur centre : où se situe un bien, où un service est rendu, où passe réellement une limite. Ce n'est pas une spécialisation que j'ai choisie au départ ; c'est la forme des problèmes qui revenaient sans cesse.",
+      "Je travaille en français (C1) et en anglais (B1), depuis l'UTC+1, qui chevauche l'essentiel de la journée de travail européenne et la matinée aux Amériques. Le travail distribué ne change pas ce qui fait un bon logiciel - ça retire juste l'option de clarifier une décision en allant voir quelqu'un à son bureau, donc j'écris plus et je suppose moins.",
     ],
     facts: [
       { label: "Basé à", value: "Yaoundé, Cameroun" },
-      { label: "Fuseau", value: "UTC+1  compatible Europe et Amériques" },
+      { label: "Fuseau", value: "UTC+1 - compatible Europe et Amériques" },
       { label: "Mode", value: "Remote, partout dans le monde" },
-      { label: "Langues", value: "Français (natif), anglais" },
+      { label: "Langues", value: "Français (C1), anglais (B1)" },
+      {
+        label: "Formation",
+        value: "Diplôme d'ingénieur & Licence, IAI Yaoundé (mention Bien)",
+      },
     ],
   },
 
@@ -156,6 +188,16 @@ export const fr: Dictionary = {
       "PostgreSQL",
       "Docker",
     ],
+    geospatial: "Géospatial",
+    geospatialItems: [
+      "PostGIS",
+      "GeoServer",
+      "Elasticsearch",
+      "Kibana",
+      "QGIS",
+      "ArcGIS",
+      "Google Maps API",
+    ],
     infrastructure: "Infrastructure",
     infrastructureItems: [
       "Linux",
@@ -180,7 +222,8 @@ export const fr: Dictionary = {
   projects: {
     label: "Travaux",
     title: "Projets sélectionnés",
-    kicker: "Trois systèmes, et ce que chacun m'a appris.",
+    kicker:
+      "Des systèmes réels livrés pour de vrais clients : d'une plateforme immobilière publique à un déploiement dans un datacenter gouvernemental.",
     all: "Tous les projets",
     viewCase: "Lire l'étude de cas",
     viewRepo: "Voir le dépôt",
@@ -196,6 +239,9 @@ export const fr: Dictionary = {
     fields: {
       role: "Rôle",
       year: "Année",
+      period: "Durée",
+      client: "Client",
+      context: "Contexte",
       stack: "Construit avec",
       focus: "Axe technique",
       architecture: "Architecture",
@@ -208,31 +254,86 @@ export const fr: Dictionary = {
     kicker: "Récentes et vérifiables.",
     columns: { name: "Certification", provider: "Organisme", date: "Date" },
     viewAll: "Voir toutes mes certifications sur LinkedIn",
-    items: [
+    groups: [
       {
-        name: "Scrum Fundamentals Certified (SFC™)",
-        provider: "ScrumStudy",
-        date: "Sept. 2025",
+        title: "DevOps & Cloud",
+        items: [
+          {
+            name: "HELM MasterClass: Kubernetes Packaging Manager",
+            provider: "Udemy",
+            date: "Août 2025",
+          },
+          {
+            name: "Introduction to DevOps Tools",
+            provider: "SkillUp / Simplilearn",
+            date: "Mai 2026",
+          },
+          {
+            name: "Getting Started with Docker",
+            provider: "SkillUp / Simplilearn",
+            date: "Mai 2026",
+          },
+          {
+            name: "AI for Cloud Infrastructure: Automating AWS with StationOps",
+            provider: "Udemy",
+            date: "Août 2025",
+          },
+        ],
       },
       {
-        name: "Software Architecture & Code Design in OOP",
-        provider: "Udemy",
-        date: "Juin 2025",
+        title: "Développement web & logiciel",
+        items: [
+          {
+            name: "Master Django Web Development: Hands-On Projects",
+            provider: "Alison",
+            date: "Févr. 2025",
+          },
+          {
+            name: "Django Essentials: Build and Deploy Real-World Apps",
+            provider: "Udemy",
+            date: "Avr. 2025",
+          },
+          {
+            name: "Node.js : Fondamentaux d'API RESTful modernes",
+            provider: "Udemy",
+            date: "Mars 2025",
+          },
+          {
+            name: "The Complete JavaScript Course: From Zero to Expert",
+            provider: "Udemy",
+            date: "Avr. 2025",
+          },
+          {
+            name: "Intro to JavaScript for React Developers",
+            provider: "CodeSignal",
+            date: "Févr. 2025",
+          },
+          {
+            name: "Python Development and Programming Fundamentals",
+            provider: "Udemy",
+            date: "Avr. 2025",
+          },
+          {
+            name: "Software Architecture & Clean Code Design in OOP",
+            provider: "Learn IT University",
+            date: "2025",
+          },
+        ],
       },
       {
-        name: "Node.js  Fondamentaux d'API RESTful modernes",
-        provider: "Udemy",
-        date: "Avr. 2025",
-      },
-      {
-        name: "Master Django Web Development",
-        provider: "Alison",
-        date: "Févr. 2025",
-      },
-      {
-        name: "Intro to JavaScript for React Developers",
-        provider: "CodeSignal",
-        date: "Févr. 2025",
+        title: "Méthodologie & gestion",
+        items: [
+          {
+            name: "Scrum Fundamentals Certified (SFC)",
+            provider: "SCRUMstudy",
+            date: "Sept. 2025",
+          },
+          {
+            name: "Marketing Strategy Fundamentals (SCMS-F)",
+            provider: "SMstudy",
+            date: "Sept. 2025",
+          },
+        ],
       },
     ],
   },
@@ -301,6 +402,145 @@ export const fr: Dictionary = {
     builtWith: "Construit avec Next.js et TypeScript",
     rights: "Tous droits réservés.",
     backToTop: "Retour en haut",
+  },
+
+  cv: {
+    label: "CV",
+    title: "Daniel TIOMELA - Ingénieur logiciel",
+    kicker:
+      "Ingénieur Fullstack & DevOps, Yaoundé, Cameroun. Ouvert aux postes en remote, partout.",
+    downloadCta: "Télécharger le PDF",
+    skillsTitle: "Compétences",
+    skillGroups: [
+      {
+        title: "Langages",
+        items: ["Python", "JavaScript", "TypeScript", "SQL", "C", "C++", "HTML5", "CSS3"],
+      },
+      {
+        title: "Frameworks & bibliothèques",
+        items: [
+          "Django",
+          "Django REST Framework",
+          "React",
+          "React Native",
+          "Next.js",
+          "Angular",
+          "Node.js",
+          "Tailwind CSS",
+          "jQuery",
+          "Bootstrap",
+        ],
+      },
+      {
+        title: "DevOps & Cloud",
+        items: [
+          "Docker",
+          "Kubernetes",
+          "Helm",
+          "GitLab CI/CD",
+          "Git",
+          "GitHub",
+          "Linux",
+          "VMware",
+          "Vercel",
+          "AWS (notions)",
+        ],
+      },
+      { title: "Serveurs", items: ["Apache", "NGINX"] },
+      { title: "Bases de données", items: ["PostgreSQL", "PostGIS", "MySQL", "MongoDB"] },
+      {
+        title: "SIG / Géomatique",
+        items: ["QGIS", "ArcGIS", "GeoServer", "Google Maps API", "Elasticsearch", "Kibana"],
+      },
+      { title: "Mobile", items: ["React Native", "Expo"] },
+      { title: "Outils IA", items: ["Claude Code", "GitHub Copilot", "Cursor"] },
+      { title: "Méthodes & Modélisation", items: ["Agile", "Scrum", "Merise", "UML"] },
+    ],
+    experienceTitle: "Expérience",
+    personalProjectsTitle: "Projets personnels",
+    educationTitle: "Formation",
+    education: [
+      {
+        degree: "Diplôme d'Ingénieur des Travaux Informatiques · Analyste Programmeur",
+        school: "Institut Africain d'Informatique (IAI), Yaoundé",
+        period: "11/2022 - 07/2023",
+        note: "Mention Bien",
+      },
+      {
+        degree: "Licence en Génie Logiciel",
+        school: "Institut Africain d'Informatique (IAI), Yaoundé",
+        period: "11/2020 - 10/2023",
+        note: "Mention Bien",
+      },
+      {
+        degree: "Diplôme de Technicien Supérieur (DTS)",
+        school: "Institut Africain d'Informatique (IAI), Yaoundé",
+        period: "11/2020 - 09/2022",
+        note: "Mention Bien",
+      },
+      {
+        degree: "Baccalauréat",
+        school: "Lycée du Manengouba",
+        period: "09/2019 - 09/2020",
+        note: "",
+      },
+    ],
+    priorRole: {
+      title: "Développeur Web",
+      org: "AL-INFOTECH",
+      period: "01/2021 - 11/2022",
+      summary:
+        "Interfaces web front-end et back-end (PHP, MySQL, WordPress) ; création et maintenance de sites web responsives ; configuration des infrastructures d'hébergement et rédaction de documentation technique ; formation des clients et support, dans une démarche Agile.",
+      stack: ["PHP", "MySQL", "WordPress", "HTML", "CSS", "JavaScript"],
+    },
+  },
+
+  uses: {
+    label: "Stack",
+    title: "Ce que j'utilise, et pourquoi",
+    kicker: "Pas tout ce que j'ai touché  les outils vers lesquels je vais, et la raison.",
+    items: [
+      {
+        name: "Django + Django REST Framework",
+        why: "Des API pensées comme des contrats, pas comme des endpoints qui existent par accident : le modèle de données vient d'abord, les routes suivent.",
+      },
+      {
+        name: "PostgreSQL / PostGIS",
+        why: "La plupart des systèmes que je construis ont une localisation en leur centre, donc la géographie vit dans la base de données, pas dans le code applicatif.",
+      },
+      {
+        name: "Next.js + TypeScript",
+        why: "Un seul framework frontend sur presque tous les projets livrés : moins de surprises, une prise en main plus rapide du code de quelqu'un d'autre.",
+      },
+      {
+        name: "Docker",
+        why: "Lancer un service en local et le lancer en production doit être la même opération.",
+      },
+      {
+        name: "Kubernetes + Helm",
+        why: "Dès qu'un système a besoin de plusieurs services qui se parlent de façon fiable, l'orchestration cesse d'être optionnelle.",
+      },
+      {
+        name: "GitLab CI/CD",
+        why: "Le travail répétitif appartient à un pipeline, pas à l'après-midi de quelqu'un.",
+      },
+      {
+        name: "GeoServer, QGIS & ArcGIS",
+        why: "Les outils qui transforment une base de données spatiale en carte réellement interrogeable.",
+      },
+      {
+        name: "Elasticsearch + Kibana",
+        why: "Pour les observatoires et systèmes de reporting où la question intéressante est « chercher dans tout ça », pas « récupérer une ligne ».",
+      },
+      {
+        name: "Nginx + Linux",
+        why: "La couche peu glamour qui décide si le HTTPS et la disponibilité arrivent vraiment.",
+      },
+      {
+        name: "Claude Code, GitHub Copilot & Cursor",
+        why: "Des outils IA que j'utilise au quotidien, pour la même raison que j'automatise n'importe quoi : passer la journée sur la décision, pas sur le code répétitif.",
+      },
+    ],
   },
 
   errors: {

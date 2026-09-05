@@ -54,6 +54,8 @@ export function Hero({ locale, dict }: { locale: Locale; dict: Dictionary }) {
             </Button>
           </div>
 
+          <p className="mt-5 text-sm text-faint">{dict.hero.availabilityDetail}</p>
+
           <ul
             className="mt-10 flex flex-wrap gap-2"
             aria-label={dict.stack.label}

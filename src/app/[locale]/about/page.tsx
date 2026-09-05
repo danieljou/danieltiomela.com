@@ -6,6 +6,7 @@ import { Container, Section, SectionHeader } from "@/components/layout/Section";
 import { Card, Rule } from "@/components/ui/Card";
 import { Trace, Glow } from "@/components/brand/Brand";
 import {
+  Certifications,
   Principles,
   StackSection,
   ContactCTA,
@@ -102,6 +103,7 @@ export default async function AboutPage({
 
       <Principles dict={dict} />
       <StackSection dict={dict} />
+      <Certifications dict={dict} />
       <ContactCTA locale={typed} dict={dict} />
     </>
   );

@@ -8,6 +8,7 @@ import {
   ContactCTA,
   FeaturedProjects,
   Principles,
+  ReadyNow,
   StackSection,
   SystemsDiagram,
   WhatIBuild,
@@ -28,6 +29,7 @@ export default async function HomePage({
   return (
     <>
       <Hero locale={typed} dict={dict} />
+      <ReadyNow dict={dict} />
       <WhatIBuild dict={dict} />
       <SystemsDiagram dict={dict} />
       <FeaturedProjects locale={typed} dict={dict}>
