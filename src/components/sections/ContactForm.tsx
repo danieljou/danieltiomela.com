@@ -198,7 +198,12 @@ function Field({
   const helpId = `${id}-help`;
   const errorId = `${id}-error`;
   const showError = invalid && Boolean(error);
-  const Element = as as React.ElementType;
+  // Kept narrow (not widened to `React.ElementType`): once
+  // `@react-three/fiber` is anywhere in the program it globally augments
+  // `JSX.IntrinsicElements` with every `three` class, and the bare
+  // `ElementType` has to satisfy that whole union too, collapsing props
+  // like `className` to `never`.
+  const Element = as;
 
   return (
     <div className={cn("flex flex-col gap-2", className)}>

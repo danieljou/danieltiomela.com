@@ -61,7 +61,7 @@ export default async function ProjectsPage({
               body={dict.blog.empty.body}
             />
           ) : (
-            <ul className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+            <ul className="mt-12 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
               {projects.map((p, i) => (
                 <li key={p.slug} className="flex">
                   <ProjectCard project={p} locale={typed} dict={dict} index={i} />

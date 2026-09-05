@@ -14,7 +14,14 @@ export function Card({
   interactive?: boolean;
   /** The gradient tick at the top-left  the tell that a card belongs here. */
   marked?: boolean;
-  as?: React.ElementType;
+  /**
+   * Constrained to DOM-element tags, not the bare `React.ElementType`  once
+   * `@react-three/fiber` is anywhere in the program it globally augments
+   * `JSX.IntrinsicElements` with every `three` class, and an unconstrained
+   * `ElementType` has to satisfy that whole union too, collapsing props like
+   * `className` to `never`.
+   */
+  as?: React.ElementType<React.HTMLAttributes<HTMLElement>>;
 }) {
   return (
     <Tag
@@ -26,7 +33,7 @@ export function Card({
           "hover:-translate-y-0.5 hover:border-line-strong hover:bg-surface-2 " +
             "focus-within:border-line-strong",
         marked &&
-          "before:absolute before:left-6 before:top-0 before:h-[3px] before:w-8 " +
+          "before:absolute before:left-6 before:top-0 before:h-0.75 before:w-8 " +
             "before:rounded-b-sm before:content-[''] before:grad-brand",
         className,
       )}

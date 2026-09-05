@@ -20,7 +20,7 @@ export default function Loading() {
         </div>
         <div
           aria-hidden="true"
-          className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-3"
+          className="mt-12 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3"
         >
           {[0, 1, 2].map((i) => (
             <Skeleton key={i} className="h-56" />
