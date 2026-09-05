@@ -64,14 +64,14 @@
 
   /* motion */
   --ease-brand: cubic-bezier(0.2, 0.7, 0.3, 1);
-  --animate-fade-up: fade-up 320ms var(--ease-brand) both;
+  --animate-fade-up: fade-up 300ms var(--ease-brand) both;
   --animate-pulse-node: pulse-node 2.4s var(--ease-brand) infinite;
 }
 
 @keyframes fade-up {
   from {
     opacity: 0;
-    transform: translateY(8px);
+    transform: translateY(14px);
   }
   to {
     opacity: 1;
@@ -191,6 +191,35 @@
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   Scroll reveal  gated behind `.js` on <html>, set by a synchronous inline
+   script in the root layout before first paint. Without it (JS disabled,
+   or the script blocked) `.reveal` elements are just plain, fully visible
+   content: the hidden state only exists once something has promised to
+   reveal it. `.is-visible` is added once by IntersectionObserver and never
+   removed  the animation plays once, never on re-entry.
+   ══════════════════════════════════════════════════════════════════════════ */
+.js .reveal {
+  opacity: 0;
+  transform: translateY(14px);
+}
+.js .reveal.is-visible {
+  animation: var(--animate-fade-up);
+}
+
+/* Hero lede, written progressively  each word is a `.reveal-word` inside a
+   `.reveal` wrapper. One IntersectionObserver on the wrapper; the per-word
+   stagger is pure CSS, driven by the `--word-delay` each word sets inline. */
+.js .reveal-word {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(6px);
+}
+.js .reveal.is-visible .reveal-word {
+  animation: fade-up 300ms var(--ease-brand) both;
+  animation-delay: var(--word-delay, 0ms);
 }
 
 /* R09  motion is a preference, not a decision the site makes for you */

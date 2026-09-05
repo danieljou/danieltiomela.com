@@ -1,7 +1,20 @@
+"use client";
+
 import { cva, type VariantProps } from "class-variance-authority";
 import Link from "next/link";
 import { forwardRef } from "react";
 import { cn } from "@/lib/utils";
+import { useMagnetic } from "@/lib/useMagnetic";
+
+function composeHandler<E extends React.SyntheticEvent>(
+  a: ((e: E) => void) | undefined,
+  b: (e: E) => void,
+) {
+  return (e: E) => {
+    a?.(e);
+    b(e);
+  };
+}
 
 const buttonVariants = cva(
   "inline-flex items-center justify-center gap-2 rounded-md font-semibold " +
@@ -59,15 +72,21 @@ export const Button = forwardRef<
   ButtonProps
 >(function Button({ className, variant, size, children, ...props }, ref) {
   const classes = cn(buttonVariants({ variant, size }), className);
+  // Discreet magnetic pull, primary buttons only  the single most important
+  // action on a page is the one worth a little extra weight under the cursor.
+  const magnetic = useMagnetic((variant ?? "primary") === "primary");
 
   if ("href" in props && props.href !== undefined) {
-    const { href, external, ...rest } = props as ButtonAsLink;
+    const { href, external, onMouseMove, onMouseLeave, ...rest } =
+      props as ButtonAsLink;
     const isExternal = external ?? /^https?:\/\//.test(href);
     return (
       <Link
         ref={ref}
         href={href}
         className={classes}
+        onMouseMove={composeHandler(onMouseMove, magnetic.onMouseMove)}
+        onMouseLeave={composeHandler(onMouseLeave, magnetic.onMouseLeave)}
         {...(isExternal
           ? { target: "_blank", rel: "noreferrer noopener" }
           : {})}
@@ -78,13 +97,16 @@ export const Button = forwardRef<
     );
   }
 
-  const { isLoading, disabled, ...rest } = props as ButtonAsButton;
+  const { isLoading, disabled, onMouseMove, onMouseLeave, ...rest } =
+    props as ButtonAsButton;
   return (
     <button
       ref={ref}
       className={classes}
       disabled={disabled || isLoading}
       aria-busy={isLoading || undefined}
+      onMouseMove={composeHandler(onMouseMove, magnetic.onMouseMove)}
+      onMouseLeave={composeHandler(onMouseLeave, magnetic.onMouseLeave)}
       {...rest}
     >
       {isLoading && <Spinner />}

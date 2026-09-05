@@ -4,6 +4,7 @@ import { Tag } from "@/components/ui/Tag";
 import { Button } from "@/components/ui/Button";
 import { ArchBlock, Connection, Node, Trace, Glow } from "@/components/brand/Brand";
 import { Container, Section, SectionHeader } from "@/components/layout/Section";
+import { Reveal } from "@/components/motion/Reveal";
 import { site } from "@/lib/site";
 import type { Locale } from "@/lib/i18n";
 import type { Dictionary } from "@/content/types";
@@ -22,13 +23,15 @@ export function ReadyNow({ dict }: { dict: Dictionary }) {
         <ul className="mt-12 grid gap-4 sm:grid-cols-3">
           {dict.readyNow.items.map((item, i) => (
             <li key={item.title}>
-              <Card className="h-full" marked>
-                <p className="font-mono text-[11px] tabular-nums tracking-[0.16em] text-primary-text">
-                  {String(i + 1).padStart(2, "0")}
-                </p>
-                <h3 className="mt-3 font-display text-lg font-semibold">{item.title}</h3>
-                <p className="mt-2.5 text-[15px] leading-relaxed text-muted">{item.body}</p>
-              </Card>
+              <Reveal delay={i * 60} className="h-full">
+                <Card className="h-full" marked>
+                  <p className="font-mono text-[11px] tabular-nums tracking-[0.16em] text-primary-text">
+                    {String(i + 1).padStart(2, "0")}
+                  </p>
+                  <h3 className="mt-3 font-display text-lg font-semibold">{item.title}</h3>
+                  <p className="mt-2.5 text-[15px] leading-relaxed text-muted">{item.body}</p>
+                </Card>
+              </Reveal>
             </li>
           ))}
         </ul>
@@ -51,13 +54,15 @@ export function Principles({ dict }: { dict: Dictionary }) {
         <ul className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {dict.principles.items.map((item, i) => (
             <li key={item.title}>
-              <Card className="h-full" marked>
-                <p className="font-mono text-[11px] tabular-nums tracking-[0.16em] text-primary-text">
-                  {String(i + 1).padStart(2, "0")}
-                </p>
-                <h3 className="mt-3 font-display text-lg font-semibold">{item.title}</h3>
-                <p className="mt-2.5 text-[15px] leading-relaxed text-muted">{item.body}</p>
-              </Card>
+              <Reveal delay={i * 60} className="h-full">
+                <Card className="h-full" marked>
+                  <p className="font-mono text-[11px] tabular-nums tracking-[0.16em] text-primary-text">
+                    {String(i + 1).padStart(2, "0")}
+                  </p>
+                  <h3 className="mt-3 font-display text-lg font-semibold">{item.title}</h3>
+                  <p className="mt-2.5 text-[15px] leading-relaxed text-muted">{item.body}</p>
+                </Card>
+              </Reveal>
             </li>
           ))}
         </ul>
@@ -79,22 +84,24 @@ export function WhatIBuild({ dict }: { dict: Dictionary }) {
           title={dict.build.title}
           kicker={dict.build.kicker}
         />
-        <dl className="mt-12 divide-y divide-line/55 border-y border-line">
-          {dict.build.items.map((item) => (
-            <div
-              key={item.title}
-              className="grid gap-2 py-6 sm:grid-cols-[minmax(0,15rem)_minmax(0,1fr)] sm:gap-10"
-            >
-              <dt className="flex items-start gap-3 font-display text-lg font-semibold text-text-strong">
-                <Node className="mt-2" />
-                {item.title}
-              </dt>
-              <dd className="text-[15px] leading-relaxed text-muted sm:text-base">
-                {item.body}
-              </dd>
-            </div>
-          ))}
-        </dl>
+        <Reveal>
+          <dl className="mt-12 divide-y divide-line/55 border-y border-line">
+            {dict.build.items.map((item) => (
+              <div
+                key={item.title}
+                className="grid gap-2 py-6 sm:grid-cols-[minmax(0,15rem)_minmax(0,1fr)] sm:gap-10"
+              >
+                <dt className="flex items-start gap-3 font-display text-lg font-semibold text-text-strong">
+                  <Node className="mt-2" />
+                  {item.title}
+                </dt>
+                <dd className="text-[15px] leading-relaxed text-muted sm:text-base">
+                  {item.body}
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </Reveal>
       </Container>
     </Section>
   );
@@ -177,19 +184,21 @@ export function StackSection({ dict }: { dict: Dictionary }) {
           kicker={dict.stack.kicker}
         />
         <div className="mt-12 space-y-8">
-          {groups.map((g) => (
-            <div key={g.title} className="grid gap-4 sm:grid-cols-[minmax(0,10rem)_minmax(0,1fr)]">
-              <h3 className="pt-1 font-mono text-[11px] uppercase tracking-[0.16em] text-faint">
-                {g.title}
-              </h3>
-              <ul className="flex flex-wrap gap-2">
-                {g.items.map((item) => (
-                  <li key={item}>
-                    <Tag tone={g.primary ? "active" : "default"}>{item}</Tag>
-                  </li>
-                ))}
-              </ul>
-            </div>
+          {groups.map((g, i) => (
+            <Reveal key={g.title} delay={i * 60}>
+              <div className="grid gap-4 sm:grid-cols-[minmax(0,10rem)_minmax(0,1fr)]">
+                <h3 className="pt-1 font-mono text-[11px] uppercase tracking-[0.16em] text-faint">
+                  {g.title}
+                </h3>
+                <ul className="flex flex-wrap gap-2">
+                  {g.items.map((item) => (
+                    <li key={item}>
+                      <Tag tone={g.primary ? "active" : "default"}>{item}</Tag>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </Reveal>
           ))}
         </div>
       </Container>
@@ -209,8 +218,8 @@ export function Certifications({ dict }: { dict: Dictionary }) {
           kicker={dict.certifications.kicker}
         />
         <div className="mt-10 space-y-10">
-          {dict.certifications.groups.map((group) => (
-            <div key={group.title}>
+          {dict.certifications.groups.map((group, i) => (
+            <Reveal key={group.title} delay={i * 60}>
               <h3 className="font-mono text-[11px] uppercase tracking-[0.16em] text-faint">
                 {group.title}
               </h3>
@@ -246,7 +255,7 @@ export function Certifications({ dict }: { dict: Dictionary }) {
                   </tbody>
                 </table>
               </div>
-            </div>
+            </Reveal>
           ))}
         </div>
         <a

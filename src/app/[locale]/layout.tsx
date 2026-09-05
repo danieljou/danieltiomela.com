@@ -114,6 +114,16 @@ export default async function LocaleLayout({
 
   return (
     <html lang={typedLocale} className={fontVariables} suppressHydrationWarning>
+      <head>
+        {/* Synchronous and tiny on purpose: runs before first paint so a
+            no-JS visitor never sees the `.reveal` hidden state  see the
+            "Scroll reveal" block in globals.css for the other half. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: "document.documentElement.classList.add('js')",
+          }}
+        />
+      </head>
       <body className="min-h-dvh antialiased">
         <a
           href="#main"

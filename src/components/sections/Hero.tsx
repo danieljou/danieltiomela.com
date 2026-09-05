@@ -3,14 +3,19 @@ import { Button } from "@/components/ui/Button";
 import { Tag, Pill } from "@/components/ui/Tag";
 import { Trace, Glow } from "@/components/brand/Brand";
 import { Container } from "@/components/layout/Section";
+import { Reveal } from "@/components/motion/Reveal";
+import { Parallax } from "@/components/motion/Parallax";
 import { site } from "@/lib/site";
 import type { Locale } from "@/lib/i18n";
 import type { Dictionary } from "@/content/types";
+import type { CSSProperties } from "react";
 
 export function Hero({ locale, dict }: { locale: Locale; dict: Dictionary }) {
   return (
     <section className="relative overflow-hidden" aria-labelledby="hero-title">
-      <Trace opacity={0.42} />
+      <Parallax speed={0.06} className="absolute inset-0">
+        <Trace opacity={0.42} />
+      </Parallax>
       <Glow
         tone="blue"
         className="-left-40 -top-56 h-[520px] w-[720px] opacity-55"
@@ -43,9 +48,19 @@ export function Hero({ locale, dict }: { locale: Locale; dict: Dictionary }) {
             {dict.hero.role}
           </p>
 
-          <p className="mt-6 max-w-xl text-[17px] leading-relaxed text-muted sm:text-lg">
-            {dict.hero.lede}
-          </p>
+          <Reveal>
+            <p className="mt-6 max-w-xl text-[17px] leading-relaxed text-muted sm:text-lg">
+              {dict.hero.lede.split(" ").map((word, i) => (
+                <span
+                  key={i}
+                  className="reveal-word"
+                  style={{ "--word-delay": `${i * 45}ms` } as CSSProperties}
+                >
+                  {word}&nbsp;
+                </span>
+              ))}
+            </p>
+          </Reveal>
 
           <div className="mt-9 flex flex-wrap gap-3">
             <Button href={`/${locale}/projects`}>{dict.hero.ctaPrimary}</Button>

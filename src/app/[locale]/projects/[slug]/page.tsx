@@ -16,6 +16,7 @@ import {
 } from "@/components/brand/Brand";
 import { ContactCTA } from "@/components/sections/Sections";
 import { ProjectCover } from "@/components/sections/ProjectCover";
+import { ReadingProgress } from "@/components/motion/ReadingProgress";
 import { site } from "@/lib/site";
 
 export function generateStaticParams() {
@@ -81,8 +82,11 @@ export default async function ProjectPage({
     { label: dict.projects.fields.focus, value: copy.focus },
   ];
 
+  const hasCaseStudy = Boolean(copy.sections && copy.sections.length > 0);
+
   return (
     <>
+      {hasCaseStudy && <ReadingProgress />}
       <Section className="relative overflow-hidden pt-10 sm:pt-16">
         <Trace opacity={0.3} />
         <Glow

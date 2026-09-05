@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Card } from "@/components/ui/Card";
 import { Tag } from "@/components/ui/Tag";
 import { ProjectCover } from "@/components/sections/ProjectCover";
+import { Reveal } from "@/components/motion/Reveal";
 import { cn } from "@/lib/utils";
 import type { Locale } from "@/lib/i18n";
 import type { Dictionary, Project } from "@/content/types";
@@ -16,16 +17,24 @@ export function ProjectCard({
   project,
   locale,
   dict,
+  /** Position in the grid it's rendered in  drives the reveal stagger. */
+  index = 0,
 }: {
   project: Project;
   locale: Locale;
   dict: Dictionary;
+  index?: number;
 }) {
   const copy = project.i18n[locale];
   const href = `/${locale}/projects/${project.slug}`;
 
   return (
-    <Card as="article" interactive className="group flex h-full flex-col gap-4">
+    <Reveal delay={index * 60} className="h-full">
+    <Card
+      as="article"
+      interactive
+      className="group flex h-full flex-col gap-4 transition-shadow duration-200 hover:shadow-[0_8px_28px_rgba(34,211,238,0.12)]"
+    >
       <ProjectCover project={project} />
 
       <div className="flex items-start justify-between gap-4">
@@ -63,8 +72,12 @@ export function ProjectCard({
         className="flex flex-wrap gap-1.5"
         aria-label={dict.projects.fields.stack}
       >
-        {project.stack.slice(0, 4).map((s) => (
-          <li key={s}>
+        {project.stack.slice(0, 4).map((s, i) => (
+          <li
+            key={s}
+            className="transition-transform ease-brand group-hover:-translate-y-0.5"
+            style={{ transitionDuration: "200ms", transitionDelay: `${i * 40}ms` }}
+          >
             <Tag size="sm">{s}</Tag>
           </li>
         ))}
@@ -80,5 +93,6 @@ export function ProjectCard({
         </span>
       </p>
     </Card>
+    </Reveal>
   );
 }

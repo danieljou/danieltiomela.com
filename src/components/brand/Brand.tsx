@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils";
+import { AnimatedValue } from "@/components/motion/AnimatedValue";
 
 /**
  * The DT mark, inline so it inherits colour and never costs a request.
@@ -140,14 +141,13 @@ export function Metric({
 }) {
   return (
     <div className="flex flex-col gap-1.5">
-      <span
+      <AnimatedValue
+        value={value}
         className={cn(
           "font-display text-4xl font-bold leading-none tracking-[-0.03em] tabular-nums sm:text-5xl",
           gradient ? "grad-text" : "text-text-strong",
         )}
-      >
-        {value}
-      </span>
+      />
       <span className="font-mono text-[11.5px] uppercase tracking-[0.15em] text-muted">
         {label}
       </span>

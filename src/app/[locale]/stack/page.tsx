@@ -4,7 +4,27 @@ import { getDictionary, isLocale, locales, type Locale } from "@/lib/i18n";
 import { Container, Section, SectionHeader } from "@/components/layout/Section";
 import { Card } from "@/components/ui/Card";
 import { Trace, Glow } from "@/components/brand/Brand";
+import { TechIcon, type TechIconName } from "@/components/brand/TechIcon";
+import { Reveal } from "@/components/motion/Reveal";
 import { ContactCTA } from "@/components/sections/Sections";
+
+/**
+ * Icons live here, indexed to `dict.uses.items`, rather than in the
+ * dictionary itself  an icon slug isn't translatable content, and this
+ * keeps en.ts/fr.ts limited to actual copy.
+ */
+const ICONS: TechIconName[][] = [
+  ["django"],
+  ["postgresql"],
+  ["nextdotjs", "typescript"],
+  ["docker"],
+  ["kubernetes", "helm"],
+  ["gitlab"],
+  ["qgis"],
+  ["elasticsearch", "kibana"],
+  ["nginx", "linux"],
+  ["anthropic"],
+];
 
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
@@ -55,14 +75,26 @@ export default async function StackPage({
           />
 
           <ul className="mt-12 grid gap-4 sm:grid-cols-2">
-            {dict.uses.items.map((item) => (
+            {dict.uses.items.map((item, i) => (
               <li key={item.name}>
-                <Card className="h-full">
-                  <h2 className="font-display text-base font-semibold text-text-strong">
-                    {item.name}
-                  </h2>
-                  <p className="mt-2 text-[15px] leading-relaxed text-muted">{item.why}</p>
-                </Card>
+                <Reveal delay={i * 60} className="h-full">
+                  <Card className="h-full">
+                    <div className="flex items-center gap-2">
+                      {(ICONS[i] ?? []).map((icon) => (
+                        <span
+                          key={icon}
+                          className="grid size-10 shrink-0 place-items-center rounded-md border border-line bg-surface text-secondary-text"
+                        >
+                          <TechIcon name={icon} />
+                        </span>
+                      ))}
+                    </div>
+                    <h2 className="mt-3 font-display text-base font-semibold text-text-strong">
+                      {item.name}
+                    </h2>
+                    <p className="mt-2 text-[15px] leading-relaxed text-muted">{item.why}</p>
+                  </Card>
+                </Reveal>
               </li>
             ))}
           </ul>

@@ -33,8 +33,8 @@ export default async function HomePage({
       <WhatIBuild dict={dict} />
       <SystemsDiagram dict={dict} />
       <FeaturedProjects locale={typed} dict={dict}>
-        {featured.map((p) => (
-          <ProjectCard key={p.slug} project={p} locale={typed} dict={dict} />
+        {featured.map((p, i) => (
+          <ProjectCard key={p.slug} project={p} locale={typed} dict={dict} index={i} />
         ))}
       </FeaturedProjects>
       <StackSection dict={dict} />
