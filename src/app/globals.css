@@ -1,0 +1,208 @@
+@import "tailwindcss";
+
+/* ══════════════════════════════════════════════════════════════════════════
+   Design tokens  ported verbatim from the brand system v1.1.
+   The identity is dark-native, so the site commits to one theme and paints
+   every surface explicitly. `color-scheme: dark` keeps form controls,
+   scrollbars and autofill consistent with it.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+@theme {
+  /* colour */
+  --color-ink: #050a16;
+  --color-bg: #0a1122;
+  --color-surface: #0f1830;
+  --color-surface-2: #16213d;
+  --color-line: #22304f;
+  --color-line-strong: #2d3f66;
+
+  --color-primary: #2f6bff; /* fill only  4.2:1, never as body text */
+  --color-primary-text: #4c86ff; /* blue as type on dark  5.5:1 */
+  --color-secondary: #22d3ee;
+  --color-secondary-text: #67e8f9;
+  --color-accent: #7c5cff; /* glows only */
+
+  --color-text: #e8edf7;
+  --color-text-strong: #ffffff;
+  --color-muted: #8da0c0;
+  /* Lightened from the kit's #5C6E8E: at 10–12px that value measured
+     3.4:1 on surface and 3.7:1 on the page ground, below the 4.5 AA floor
+     for small text. #7386A8 clears both (4.8 and 5.1) and reads the same. */
+  --color-faint: #7386a8;
+
+  --color-danger: #ff6b6b;
+  --color-danger-soft: #ff8a8a;
+  --color-success: #34d399;
+
+  /* typography */
+  --font-display:
+    var(--font-space-grotesk), Sora, Manrope, system-ui, sans-serif;
+  --font-sans:
+    var(--font-inter), system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono:
+    var(--font-jetbrains), ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --tracking-display: -0.022em;
+  --tracking-label: 0.14em;
+
+  /* Spacing intentionally uses Tailwind's own 4px-based numeric scale.
+     Defining --spacing-sm/md/lg/xl here would shadow the named container
+     sizes and silently break every max-w-sm / max-w-xl on the site. */
+
+  /* radius */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-pill: 999px;
+
+  /* elevation  on dark, depth is value, not blur */
+  --shadow-1: 0 1px 2px rgba(5, 10, 22, 0.28);
+  --shadow-2: 0 4px 12px rgba(5, 10, 22, 0.32);
+  --shadow-3: 0 12px 32px rgba(5, 10, 22, 0.4);
+  --shadow-photo: 0 24px 60px rgba(5, 10, 22, 0.55);
+
+  /* motion */
+  --ease-brand: cubic-bezier(0.2, 0.7, 0.3, 1);
+  --animate-fade-up: fade-up 320ms var(--ease-brand) both;
+  --animate-pulse-node: pulse-node 2.4s var(--ease-brand) infinite;
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes pulse-node {
+  0%,
+  100% {
+    box-shadow: 0 0 0 5px rgba(34, 211, 238, 0.14);
+  }
+  50% {
+    box-shadow: 0 0 0 9px rgba(34, 211, 238, 0.07);
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   Base
+   ══════════════════════════════════════════════════════════════════════════ */
+
+@layer base {
+  :root {
+    color-scheme: dark;
+    --trace: url("/assets/patterns/trace-tile-dark.svg");
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Focus is never removed  only restyled. 3:1 against every surface. */
+  :focus-visible {
+    outline: 2px solid var(--color-secondary);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  ::selection {
+    background: rgba(34, 211, 238, 0.26);
+    color: var(--color-text-strong);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    letter-spacing: var(--tracking-display);
+    color: var(--color-text-strong);
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  /* Autofill on a dark ground would otherwise flash white */
+  input:-webkit-autofill,
+  textarea:-webkit-autofill {
+    -webkit-text-fill-color: var(--color-text);
+    -webkit-box-shadow: 0 0 0 1000px var(--color-surface-2) inset;
+    caret-color: var(--color-text);
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   Utilities the brand needs and Tailwind has no primitive for
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* The page gutter. `max()` with the safe-area inset is what keeps content off
+   the notch and the rounded corners in iOS landscape  on every other device
+   the insets are 0 and this is just the 20/32px padding. */
+@utility gutter {
+  padding-inline: max(
+    1.25rem,
+    env(safe-area-inset-left),
+    env(safe-area-inset-right)
+  );
+  @media (width >= 40rem) {
+    padding-inline: max(
+      2rem,
+      env(safe-area-inset-left),
+      env(safe-area-inset-right)
+    );
+  }
+}
+
+@utility trace-bg {
+  background-image: var(--trace);
+  background-repeat: repeat;
+}
+
+@utility grad-brand {
+  background-image: linear-gradient(135deg, #2f6bff 0%, #22d3ee 100%);
+}
+
+/* Same gradient, lightened at the blue end so an ink label on top clears
+   4.5:1 across the whole sweep  #2F6BFF alone gives only 4.40. Used on
+   filled buttons; the decorative rule keeps the original. */
+@utility grad-brand-action {
+  background-image: linear-gradient(135deg, #3f7bff 0%, #22d3ee 100%);
+}
+
+@utility grad-text {
+  background-image: linear-gradient(135deg, #2f6bff 0%, #22d3ee 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+/* R09  motion is a preference, not a decision the site makes for you */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
