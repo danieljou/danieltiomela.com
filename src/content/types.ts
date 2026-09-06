@@ -231,6 +231,45 @@ export interface Dictionary {
     kicker: string;
     items: { name: string; why: string }[];
   };
+  immersive: {
+    skipLabel: string;
+    progressLabel: string;
+    /** Rail nav labels  short, fit in a small pill. */
+    rail: { act1: string; act2: string; act3: string };
+    act1: {
+      eyebrow: string;
+      title: string;
+      kicker: string;
+      /** Exactly 5, in order  the request's journey through the stack. */
+      stages: { number: string; title: string; body: string; tech: string[] }[];
+    };
+    act2: {
+      eyebrow: string;
+      title: string;
+      kicker: string;
+      intro: string;
+      location: string;
+      /** DST shifts European/US offsets by up to 1h across the year. */
+      overlapNote: string;
+      missions: { place: string; note: string }[];
+      timezones: { city: string; offset: string }[];
+    };
+    act3: {
+      eyebrow: string;
+      title: string;
+      kicker: string;
+      intro: string;
+      /** 3-4 real, CV-verifiable figures only. */
+      metrics: { value: string; label: string }[];
+      viewAll: string;
+    };
+    exit: {
+      title: string;
+      body: string;
+      ctaProjects: string;
+      ctaContact: string;
+    };
+  };
   errors: {
     notFound: { title: string; body: string; cta: string };
     generic: { title: string; body: string; cta: string };

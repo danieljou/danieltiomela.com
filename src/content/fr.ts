@@ -543,6 +543,93 @@ export const fr: Dictionary = {
     ],
   },
 
+  immersive: {
+    skipLabel: "Passer la section immersive",
+    progressLabel: "Progression de la section",
+    rail: { act1: "Système", act2: "Monde", act3: "Parcours" },
+    act1: {
+      eyebrow: "Acte I",
+      title: "Le système",
+      kicker: "Le voyage d'une requête",
+      stages: [
+        {
+          number: "01",
+          title: "L'interface",
+          body: "Une requête démarre ici : un navigateur qui affiche du React et du Next.js, construit sur des modèles de données plutôt que sur des routes.",
+          tech: ["Next.js", "React", "TypeScript"],
+        },
+        {
+          number: "02",
+          title: "La périphérie",
+          body: "Avant d'atteindre le moindre code applicatif, elle traverse un réseau et un pipeline qui a déjà testé et livré ce qu'elle s'apprête à exécuter.",
+          tech: ["CI/CD", "GitLab CI", "Cache"],
+        },
+        {
+          number: "03",
+          title: "L'API",
+          body: "Un noyau Django REST Framework la résout : authentification, logique métier, un contrat qui existait avant l'endpoint.",
+          tech: ["Django", "Django REST Framework"],
+        },
+        {
+          number: "04",
+          title: "La donnée localisée",
+          body: "La plupart de ce que je construis a une localisation en son centre. PostGIS transforme des coordonnées en requêtes ; GeoServer transforme ces requêtes en carte réellement lisible.",
+          tech: ["PostgreSQL", "PostGIS", "GeoServer"],
+        },
+        {
+          number: "05",
+          title: "L'orchestration",
+          body: "En reculant, on découvre que tout le voyage tenait dans des conteneurs, répliqués et planifiés  la partie qui décide si tout ça survit au trafic réel.",
+          tech: ["Docker", "Kubernetes", "GitLab CI/CD"],
+        },
+      ],
+    },
+    act2: {
+      eyebrow: "Acte II",
+      title: "Le monde",
+      kicker: "D'où je travaille",
+      intro:
+        "Je suis basé à Yaoundé, au Cameroun (UTC+1). Ce n'est pas une contrainte à gérer  c'est un fuseau qui chevauche toute la journée de travail européenne et la matinée américaine.",
+      location: "Yaoundé, Cameroun",
+      overlapNote:
+        "Les décalages avec l'Europe et les États-Unis varient de ±1h avec l'heure d'été ; Yaoundé n'observe jamais de changement d'heure  les chiffres ci-dessous sont ceux de l'heure d'hiver.",
+      missions: [
+        {
+          place: "Bénin",
+          note: "Déploiement d'infrastructure sur site au datacenter national, pour le programme d'observatoire numérique de la GIZ",
+        },
+        {
+          place: "Douala",
+          note: "Architecture et leadership technique pour une autorité régionale d'urbanisme (anonymisé)",
+        },
+      ],
+      timezones: [
+        { city: "Paris / Berlin", offset: "+0h" },
+        { city: "Londres", offset: "-1h" },
+        { city: "New York", offset: "-6h" },
+      ],
+    },
+    act3: {
+      eyebrow: "Acte III",
+      title: "Le parcours",
+      kicker: "Ce que j'ai construit",
+      intro: "Des systèmes réels, des dates réelles  de développeur à lead, puis architecte.",
+      metrics: [
+        { value: "5+", label: "Années à livrer du logiciel en production" },
+        { value: "6", label: "Programmes gouvernementaux & institutionnels livrés" },
+        { value: "2", label: "Pays avec livraison sur site" },
+        { value: "40+", label: "Outils et technologies maîtrisés" },
+      ],
+      viewAll: "Voir tous les projets",
+    },
+    exit: {
+      title: "Et ensuite",
+      body: "Voilà le parcours jusqu'ici. Voir chaque projet en détail, ou entamer une conversation.",
+      ctaProjects: "Tous les projets",
+      ctaContact: "Me contacter",
+    },
+  },
+
   errors: {
     notFound: {
       title: "Cette page n'existe pas",

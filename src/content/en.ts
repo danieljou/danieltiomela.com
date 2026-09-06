@@ -542,6 +542,93 @@ export const en: Dictionary = {
     ],
   },
 
+  immersive: {
+    skipLabel: "Skip the immersive section",
+    progressLabel: "Section progress",
+    rail: { act1: "System", act2: "World", act3: "Path" },
+    act1: {
+      eyebrow: "Act I",
+      title: "The system",
+      kicker: "The journey of a request",
+      stages: [
+        {
+          number: "01",
+          title: "The interface",
+          body: "A request starts here: a browser rendering React and Next.js, built on data models rather than routes.",
+          tech: ["Next.js", "React", "TypeScript"],
+        },
+        {
+          number: "02",
+          title: "The edge",
+          body: "Before it reaches any application code, it crosses a network and a pipeline that already tested and shipped whatever it's about to run.",
+          tech: ["CI/CD", "GitLab CI", "Caching"],
+        },
+        {
+          number: "03",
+          title: "The API",
+          body: "A Django REST Framework core resolves it: authentication, business logic, a contract that existed before the endpoint did.",
+          tech: ["Django", "Django REST Framework"],
+        },
+        {
+          number: "04",
+          title: "Located data",
+          body: "Most of what I build has a location at its center. PostGIS turns coordinates into queries; GeoServer turns queries into a map someone can actually read.",
+          tech: ["PostgreSQL", "PostGIS", "GeoServer"],
+        },
+        {
+          number: "05",
+          title: "Orchestration",
+          body: "Zoom out, and the whole journey ran inside containers, replicated and scheduled  the part that decides whether any of this survives real traffic.",
+          tech: ["Docker", "Kubernetes", "GitLab CI/CD"],
+        },
+      ],
+    },
+    act2: {
+      eyebrow: "Act II",
+      title: "The world",
+      kicker: "Where I work from",
+      intro:
+        "I'm based in Yaoundé, Cameroon (UTC+1). That's not a constraint to plan around  it's a timezone that overlaps the entire European working day and the American morning.",
+      location: "Yaoundé, Cameroon",
+      overlapNote:
+        "European and US offsets shift by up to an hour with daylight saving; Yaoundé itself never observes it, so the numbers below are the winter/standard-time figures.",
+      missions: [
+        {
+          place: "Benin",
+          note: "On-site infrastructure deployment at a national datacenter, for GIZ's digital-observatory programme",
+        },
+        {
+          place: "Douala",
+          note: "Architecture and technical leadership for a regional urban-planning authority (anonymised)",
+        },
+      ],
+      timezones: [
+        { city: "Paris / Berlin", offset: "+0h" },
+        { city: "London", offset: "-1h" },
+        { city: "New York", offset: "-6h" },
+      ],
+    },
+    act3: {
+      eyebrow: "Act III",
+      title: "The path",
+      kicker: "What I've built",
+      intro: "Real systems, real dates  from developer to lead to architect.",
+      metrics: [
+        { value: "5+", label: "Years shipping production software" },
+        { value: "6", label: "Government & institutional programmes delivered" },
+        { value: "2", label: "Countries with on-site delivery" },
+        { value: "40+", label: "Tools and technologies across the stack" },
+      ],
+      viewAll: "See every project",
+    },
+    exit: {
+      title: "Where to next",
+      body: "That's the path so far. See every project in detail, or start a conversation.",
+      ctaProjects: "All projects",
+      ctaContact: "Get in touch",
+    },
+  },
+
   errors: {
     notFound: {
       title: "This page does not exist",
