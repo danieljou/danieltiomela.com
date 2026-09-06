@@ -1,9 +1,14 @@
 /**
- * The three acts share one continuous scroll range, weighted 500/300/400vh
- * per the brief (desktop)  Act I is the longest journey, Act II is a
- * shorter contemplative beat, Act III is the exploratory close.
+ * The three acts share one continuous scroll range. Act III got a
+ * significant bump over the brief's original 400vh: once it plays through
+ * its seven projects one at a time (matching Act I's paced stages) rather
+ * than presenting them all at once, it needs roughly as much room per
+ * "stage" as Act I does (500vh / 5 stages = 100vh each  seven projects
+ * at that pace is ~700vh). Act II grew a little too, since a shaded,
+ * textured globe with an atmosphere and a starfield deserves more than a
+ * rushed pass-through.
  */
-export const ACT_VH = { act1: 500, act2: 300, act3: 400 };
+export const ACT_VH = { act1: 500, act2: 400, act3: 700 };
 const TOTAL_VH = ACT_VH.act1 + ACT_VH.act2 + ACT_VH.act3;
 
 export const ACT_BOUNDARIES = [

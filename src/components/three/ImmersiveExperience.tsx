@@ -6,6 +6,8 @@ import { ACT_BOUNDARIES, getActState } from "./actProgress";
 import { Act1Canvas } from "./act1/Act1Canvas";
 import { Act2Canvas } from "./act2/Act2Canvas";
 import { Act3Canvas } from "./act3/Act3Canvas";
+import { ORDERED_SLUGS } from "./act3/constants";
+import { getProject } from "@/content/projects";
 import { Tag } from "@/components/ui/Tag";
 import { cn } from "@/lib/utils";
 import type { Locale } from "@/lib/i18n";
@@ -32,9 +34,11 @@ export function ImmersiveExperience({ locale, dict }: { locale: Locale; dict: Di
   const subProgressRef = useRef(0);
   const [activeAct, setActiveAct] = useState<0 | 1 | 2>(0);
   const [activeStage, setActiveStage] = useState(0);
+  const [activeProject, setActiveProject] = useState(0);
   const [hoverLabel, setHoverLabel] = useState<string | null>(null);
   const lastAct = useRef<0 | 1 | 2>(0);
   const lastStage = useRef(0);
+  const lastProject = useRef(0);
 
   useEffect(() => {
     document.body.style.cursor = hoverLabel ? "pointer" : "";
@@ -59,6 +63,13 @@ export function ImmersiveExperience({ locale, dict }: { locale: Locale; dict: Di
           setActiveStage(stageIdx);
         }
       }
+      if (state.actIndex === 2) {
+        const projectIdx = Math.round(state.subProgress * (ORDERED_SLUGS.length - 1));
+        if (projectIdx !== lastProject.current) {
+          lastProject.current = projectIdx;
+          setActiveProject(projectIdx);
+        }
+      }
     }
     update();
     window.addEventListener("scroll", update, { passive: true });
@@ -80,9 +91,12 @@ export function ImmersiveExperience({ locale, dict }: { locale: Locale; dict: Di
   }
 
   const stage = im.act1.stages[activeStage];
+  const projectSlug = ORDERED_SLUGS[activeProject];
+  const project = projectSlug ? getProject(projectSlug) : undefined;
+  const projectCopy = project?.i18n[locale];
 
   return (
-    <section ref={sectionRef} className="relative h-[600vh] lg:h-[1200vh]">
+    <section ref={sectionRef} className="relative h-[800vh] lg:h-[1600vh]">
       <div className="sticky top-0 h-dvh overflow-hidden">
         <div className="absolute inset-0">
           {activeAct === 0 && (
@@ -96,7 +110,14 @@ export function ImmersiveExperience({ locale, dict }: { locale: Locale; dict: Di
               onHover={setHoverLabel}
             />
           )}
-          {activeAct === 2 && <Act3Canvas active locale={locale} onHover={setHoverLabel} />}
+          {activeAct === 2 && (
+            <Act3Canvas
+              active
+              locale={locale}
+              progress={subProgressRef}
+              onHover={setHoverLabel}
+            />
+          )}
         </div>
 
         {/* Jump nav  real buttons, not scroll-hijacked: each one is a
@@ -156,9 +177,17 @@ export function ImmersiveExperience({ locale, dict }: { locale: Locale; dict: Di
             )}
             {activeAct === 2 && (
               <>
-                <h2 className="font-display text-2xl font-bold">{im.act3.title}</h2>
+                <p className="font-mono text-xs tabular-nums text-primary-text">
+                  {String(activeProject + 1).padStart(2, "0")} / {String(ORDERED_SLUGS.length).padStart(2, "0")}
+                </p>
+                <h2 className="mt-2 font-display text-2xl font-bold">
+                  {projectCopy?.name ?? im.act3.title}
+                </h2>
                 <p className="mt-2 text-[15px] leading-relaxed text-muted">
-                  {hoverLabel ?? im.act3.intro}
+                  {hoverLabel ??
+                    (projectCopy
+                      ? `${project?.year} · ${project?.role} — ${projectCopy.tagline}`
+                      : im.act3.intro)}
                 </p>
               </>
             )}

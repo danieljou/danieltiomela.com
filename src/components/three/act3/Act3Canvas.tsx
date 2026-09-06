@@ -1,6 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import type { RefObject } from "react";
 import type { Locale } from "@/lib/i18n";
 
 const OrbitCanvas = dynamic(() => import("./OrbitCanvas"), { ssr: false });
@@ -13,15 +14,17 @@ const OrbitCanvas = dynamic(() => import("./OrbitCanvas"), { ssr: false });
 export function Act3Canvas({
   active,
   locale,
+  progress,
   onHover,
 }: {
   active: boolean;
   locale: Locale;
+  progress: RefObject<number>;
   onHover: (label: string | null) => void;
 }) {
   return (
     <div className="absolute inset-0">
-      <OrbitCanvas active={active} locale={locale} onHover={onHover} />
+      <OrbitCanvas active={active} locale={locale} progress={progress} onHover={onHover} />
     </div>
   );
 }

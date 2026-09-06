@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import type { RefObject } from "react";
 import { useFrame, useThree, type ThreeEvent } from "@react-three/fiber";
 import { useRouter } from "next/navigation";
 import type { Group, Mesh, MeshBasicMaterial } from "three";
@@ -56,6 +57,9 @@ export function ProjectObject({
   label,
   active,
   bobOffset,
+  progress,
+  orderIndex,
+  total,
 }: {
   position: [number, number, number];
   kind: ObjectKind;
@@ -64,6 +68,10 @@ export function ProjectObject({
   label: string;
   active: boolean;
   bobOffset: number;
+  /** Act III's own 0-1 scroll progress  drives sequenced emphasis below. */
+  progress: RefObject<number>;
+  orderIndex: number;
+  total: number;
 }) {
   const rootRef = useRef<Group>(null);
   const scaleRef = useRef<Group>(null);
@@ -94,7 +102,13 @@ export function ProjectObject({
     if (root) {
       root.position.y = position[1] + Math.sin(state.clock.elapsedTime * 0.6 + bobOffset) * 0.08;
     }
-    hoverAmount.current += (targetHover.current - hoverAmount.current) * 0.15;
+    // The project nearest the current scroll position along the timeline
+    // reads as "current" even without a hover, echoing Act I's stage-by-
+    // stage reveal instead of leaving every project equally emphasised.
+    const continuousIndex = progress.current * (total - 1);
+    const sequenceEmphasis = Math.max(0, 1 - Math.abs(continuousIndex - orderIndex));
+    const target = Math.max(targetHover.current, sequenceEmphasis);
+    hoverAmount.current += (target - hoverAmount.current) * 0.15;
     const scaleGroup = scaleRef.current;
     if (scaleGroup) {
       scaleGroup.scale.setScalar(1 + hoverAmount.current * 0.35);

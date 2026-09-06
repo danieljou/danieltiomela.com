@@ -26,3 +26,10 @@ export function timelineZ(t: number) {
   const frac = (t - TIMELINE_START) / (TIMELINE_END - TIMELINE_START);
   return DEPTH_SPAN / 2 - frac * DEPTH_SPAN;
 }
+
+/** Chronological order  object key order matches insertion order here, which is already oldest-first. */
+export const ORDERED_SLUGS = Object.keys(ACT3_LAYOUT);
+
+export function orderT(index: number) {
+  return ORDERED_SLUGS.length > 1 ? index / (ORDERED_SLUGS.length - 1) : 0;
+}
