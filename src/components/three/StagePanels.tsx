@@ -5,17 +5,14 @@ import { Tag } from "@/components/ui/Tag";
 import type { Locale } from "@/lib/i18n";
 import type { Dictionary } from "@/content/types";
 import { ACT3_PROJECT_SLUGS, IMMERSIVE_ACT_IDS } from "./acts";
-import { Act1Canvas } from "./act1/Act1Canvas";
-import { Act2Canvas } from "./act2/Act2Canvas";
-import { Act3Canvas } from "./act3/Act3Canvas";
 
 /**
- * Real HTML, always fully present  never behind a canvas, never revealed
- * only on hover or scroll-trigger. This is the step-1 deliverable itself
- * and, once the pinned/3D presentation exists, what `prefers-reduced-motion`
- * and no-JS visitors get instead of it. Indexable, selectable, and the
- * seven Act III projects are real links reachable by keyboard  not objects
- * that exist only inside a canvas.
+ * Real HTML, always fully present  no canvas here at all. This is what
+ * `prefers-reduced-motion`, no WebGL, and no-JS visitors get: every fact
+ * from all three acts, in normal reading order, the seven Act III projects
+ * as real links reachable by keyboard. `ImmersiveSection` decides whether
+ * to show this or the full-page pinned 3D experience; this component never
+ * needs to know which.
  */
 export function StagePanels({ locale, dict }: { locale: Locale; dict: Dictionary }) {
   const im = dict.immersive;
@@ -43,50 +40,26 @@ export function StagePanels({ locale, dict }: { locale: Locale; dict: Dictionary
         <p className="mt-3 max-w-xl text-muted">{im.act1.kicker}</p>
         <Rule className="mt-6" />
 
-        {/*
-          Desktop: canvas pinned in its own column while the stages scroll
-          past beside it  without this, the geospatial and cluster stages
-          (progress ~0.75/~1.0) never reach the viewport at all, since a
-          plain stacked canvas scrolls away long before scroll progress gets
-          that far. Mobile keeps the simpler stacked layout (no sticky,
-          canvas above the cards) rather than reproducing a two-column
-          scrollytelling layout on a small screen.
-
-          Two nesting levels on the sticky side, not one: a `sticky` element
-          stays pinned only while scrolling through its OWN parent's height,
-          not the grid row's. Default `items-stretch` makes the grid item
-          match the `ol` column's full height, giving the inner sticky div
-          room to float across that whole span instead of releasing after
-          just the canvas's own ~60vh.
-        */}
-        <div className="mt-10 lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)] lg:gap-10">
-          <div id="immersive-act-1-scene" className="lg:relative">
-            <div className="lg:sticky lg:top-24">
-              <Act1Canvas />
-            </div>
-          </div>
-
-          <ol className="mt-10 space-y-5 lg:mt-0">
-            {im.act1.stages.map((s) => (
-              <li key={s.number}>
-                <Card marked>
-                  <p className="font-mono text-xs tabular-nums text-primary-text">{s.number}</p>
-                  <h3 className="mt-2 font-display text-xl font-bold">{s.title}</h3>
-                  <p className="mt-2 max-w-prose text-[15px] leading-relaxed text-muted">
-                    {s.body}
-                  </p>
-                  <ul className="mt-4 flex flex-wrap gap-1.5">
-                    {s.tech.map((t) => (
-                      <li key={t}>
-                        <Tag size="sm">{t}</Tag>
-                      </li>
-                    ))}
-                  </ul>
-                </Card>
-              </li>
-            ))}
-          </ol>
-        </div>
+        <ol className="mt-10 space-y-5">
+          {im.act1.stages.map((s) => (
+            <li key={s.number}>
+              <Card marked>
+                <p className="font-mono text-xs tabular-nums text-primary-text">{s.number}</p>
+                <h3 className="mt-2 font-display text-xl font-bold">{s.title}</h3>
+                <p className="mt-2 max-w-prose text-[15px] leading-relaxed text-muted">
+                  {s.body}
+                </p>
+                <ul className="mt-4 flex flex-wrap gap-1.5">
+                  {s.tech.map((t) => (
+                    <li key={t}>
+                      <Tag size="sm">{t}</Tag>
+                    </li>
+                  ))}
+                </ul>
+              </Card>
+            </li>
+          ))}
+        </ol>
       </section>
 
       <Separator />
@@ -107,13 +80,6 @@ export function StagePanels({ locale, dict }: { locale: Locale; dict: Dictionary
           {im.act2.title}
         </h2>
         <p className="mt-3 max-w-2xl text-[15px] leading-relaxed text-muted">{im.act2.intro}</p>
-
-        <div className="mt-10">
-          <Act2Canvas
-            clockLabel={im.act2.location}
-            missionLabels={im.act2.missions.map((m) => m.place)}
-          />
-        </div>
 
         <Card className="mt-8">
           <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-faint">
@@ -168,10 +134,6 @@ export function StagePanels({ locale, dict }: { locale: Locale; dict: Dictionary
           {im.act3.title}
         </h2>
         <p className="mt-3 max-w-2xl text-muted">{im.act3.intro}</p>
-
-        <div className="mt-10">
-          <Act3Canvas locale={locale} />
-        </div>
 
         <div className="mt-8 grid gap-6 sm:grid-cols-4">
           {im.act3.metrics.map((m) => (
