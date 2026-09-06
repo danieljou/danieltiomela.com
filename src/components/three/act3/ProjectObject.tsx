@@ -1,57 +1,50 @@
 "use client";
 
-import { useRef } from "react";
+import { useMemo, useRef } from "react";
 import type { RefObject } from "react";
 import { useFrame, useThree, type ThreeEvent } from "@react-three/fiber";
 import { useRouter } from "next/navigation";
 import type { Group, Mesh, MeshBasicMaterial } from "three";
 import type { ObjectKind } from "./constants";
+import { createProjectTexture } from "./projectTexture";
 
-/** Shape reflects what the project actually is, not a generic marker. */
-function Shape({ kind }: { kind: ObjectKind }) {
-  if (kind === "infra") {
-    return (
-      <>
-        <mesh position={[-0.14, 0.1, 0]}>
-          <boxGeometry args={[0.22, 0.22, 0.22]} />
-          <meshBasicMaterial color="#2F6BFF" />
-        </mesh>
-        <mesh position={[0.14, 0, 0]}>
-          <boxGeometry args={[0.22, 0.22, 0.22]} />
-          <meshBasicMaterial color="#2F6BFF" />
-        </mesh>
-        <mesh position={[0, -0.14, 0.1]}>
-          <boxGeometry args={[0.22, 0.22, 0.22]} />
-          <meshBasicMaterial color="#2F6BFF" />
-        </mesh>
-      </>
-    );
-  }
-  if (kind === "geo") {
-    return (
-      <mesh>
-        <icosahedronGeometry args={[0.24, 0]} />
-        <meshBasicMaterial color="#2F6BFF" wireframe />
-      </mesh>
-    );
-  }
+const SCREEN_W = 0.56;
+const SCREEN_H = 0.35;
+
+/** A floating "screen" showing the project's own dashboard/map/ops mockup
+    rather than an abstract shape  see projectTexture.ts for why this isn't
+    a real screenshot. A thin bezel behind the plane reads as a device, not
+    a flat card pasted in space. */
+function Screen({ kind, slug, name, stack }: { kind: ObjectKind; slug: string; name: string; stack: string[] }) {
+  const texture = useMemo(
+    () => createProjectTexture({ slug, name, kind, stack }),
+    [slug, name, kind, stack],
+  );
+
   return (
-    <>
-      <mesh position={[0, 0.06, 0]}>
-        <boxGeometry args={[0.4, 0.04, 0.28]} />
-        <meshBasicMaterial color="#2F6BFF" />
+    <group>
+      <mesh position={[0, 0, -0.008]}>
+        <planeGeometry args={[SCREEN_W + 0.04, SCREEN_H + 0.04]} />
+        <meshBasicMaterial color="#060a14" />
       </mesh>
-      <mesh position={[0, -0.02, 0]}>
-        <boxGeometry args={[0.32, 0.04, 0.22]} />
-        <meshBasicMaterial color="#4C86FF" />
+      <mesh>
+        <planeGeometry args={[SCREEN_W, SCREEN_H]} />
+        {texture ? (
+          <meshBasicMaterial map={texture} toneMapped={false} />
+        ) : (
+          <meshBasicMaterial color="#2F6BFF" />
+        )}
       </mesh>
-    </>
+    </group>
   );
 }
 
 export function ProjectObject({
   position,
   kind,
+  slug,
+  name,
+  stack,
   href,
   onHover,
   label,
@@ -63,6 +56,9 @@ export function ProjectObject({
 }: {
   position: [number, number, number];
   kind: ObjectKind;
+  slug: string;
+  name: string;
+  stack: string[];
   href: string;
   onHover: (label: string | null) => void;
   label: string;
@@ -101,6 +97,9 @@ export function ProjectObject({
     const root = rootRef.current;
     if (root) {
       root.position.y = position[1] + Math.sin(state.clock.elapsedTime * 0.6 + bobOffset) * 0.08;
+      // Billboard  the screen always faces the flythrough camera, so the
+      // mockup stays legible instead of edge-on as the camera moves past it.
+      root.quaternion.copy(state.camera.quaternion);
     }
     // The project nearest the current scroll position along the timeline
     // reads as "current" even without a hover, echoing Act I's stage-by-
@@ -128,12 +127,12 @@ export function ProjectObject({
       onPointerOut={handleOut}
       onClick={handleClick}
     >
-      <mesh ref={glowRef}>
-        <sphereGeometry args={[0.32, 16, 16]} />
+      <mesh ref={glowRef} position={[0, 0, -0.02]}>
+        <planeGeometry args={[SCREEN_W + 0.18, SCREEN_H + 0.18]} />
         <meshBasicMaterial color="#22D3EE" transparent opacity={0} />
       </mesh>
       <group ref={scaleRef}>
-        <Shape kind={kind} />
+        <Screen kind={kind} slug={slug} name={name} stack={stack} />
       </group>
     </group>
   );

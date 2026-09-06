@@ -114,6 +114,9 @@ export function ProjectOrbit({
             key={slug}
             position={[position.x, position.y, position.z]}
             kind={layout.kind}
+            slug={slug}
+            name={copy.name}
+            stack={project.stack}
             href={`/${locale}/projects/${slug}`}
             onHover={onHover}
             label={`${copy.name} · ${project.year} · ${project.role}`}
