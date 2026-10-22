@@ -43,8 +43,9 @@ function supportsWebGL() {
  * Its content is the section's own  the heading, one caption per step with
  * its real link, and a full plain list for assistive tech.
  *
- * Same contract as the hero and the immersive scene: it is only built when
- * the viewport is wide, motion is allowed and WebGL exists. Everyone else
+ * Same contract as the immersive scene: it is only built when motion is
+ * allowed and WebGL exists, on phones as well as desktop (the camera pulls
+ * back to fit a portrait viewport, see StageCanvas). Everyone else
  * (and everyone before hydration) gets `fallback`, the section as ordinary,
  * fully readable page content.
  */
@@ -83,8 +84,7 @@ export function PinnedStage({
   useEffect(() => {
     const raf = requestAnimationFrame(() => {
       const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      const wide = window.matchMedia("(min-width: 1024px)").matches;
-      setEligible(!reduce && wide && supportsWebGL());
+      setEligible(!reduce && supportsWebGL());
     });
     return () => cancelAnimationFrame(raf);
   }, []);
@@ -185,21 +185,21 @@ export function PinnedStage({
           </header>
         </Container>
 
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 pb-10 sm:pb-12">
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 pb-6 sm:pb-12">
           <Container>
             <div
               key={step}
-              className="animate-fade-up pointer-events-auto flex max-w-lg gap-5 rounded-xl border border-line-strong/70 bg-bg/70 p-6 shadow-photo backdrop-blur-xl sm:p-7"
+              className="animate-fade-up pointer-events-auto flex max-w-lg gap-4 rounded-xl border border-line-strong/70 bg-bg/70 p-4 shadow-photo backdrop-blur-xl sm:gap-5 sm:p-7"
             >
               <p
                 aria-hidden="true"
-                className="font-display text-5xl font-bold leading-none tabular-nums grad-text sm:text-6xl"
+                className="font-display text-4xl font-bold leading-none tabular-nums grad-text sm:text-6xl"
               >
                 {String(step + 1).padStart(2, "0")}
               </p>
               <div className="min-w-0">
-                <h3 className="font-display text-2xl font-bold">{current.title}</h3>
-                <p className="mt-2 text-[15px] leading-relaxed text-muted">{current.body}</p>
+                <h3 className="font-display text-xl font-bold sm:text-2xl">{current.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-muted sm:text-[15px]">{current.body}</p>
                 {current.tags && (
                   <ul className="mt-4 flex flex-wrap gap-1.5">
                     {current.tags.map((t) => (

@@ -11,7 +11,11 @@ import type { Locale } from "@/lib/i18n";
 import type { Dictionary } from "@/content/types";
 import type { CSSProperties } from "react";
 
-const CHIP_POSITION = ["-left-6 top-[14%]", "-right-8 top-[42%]", "left-2 bottom-[10%]"];
+const CHIP_POSITION = [
+  "left-0 top-[14%] lg:-left-6",
+  "right-0 top-[42%] lg:-right-8",
+  "left-2 bottom-[10%]",
+];
 
 export function Hero({ locale, dict }: { locale: Locale; dict: Dictionary }) {
   return (
@@ -77,7 +81,7 @@ export function Hero({ locale, dict }: { locale: Locale; dict: Dictionary }) {
             a stack of layers at different depths: the WebGL rings behind, the
             portrait in the middle, tags floating in front. The whole stack
             leans toward the cursor, so the layers slide against each other. */}
-        <div aria-hidden="true" className="pointer-events-none relative mx-auto hidden w-full max-w-md lg:block">
+        <div aria-hidden="true" className="pointer-events-none relative mx-auto mt-4 w-full max-w-[18rem] sm:max-w-sm lg:mt-0 lg:max-w-md">
           <HeroScene />
           <Scene3D baseRx={2} baseRy={-4} global>
             <div className="layer relative">
@@ -96,7 +100,7 @@ export function Hero({ locale, dict }: { locale: Locale; dict: Dictionary }) {
                   width={605}
                   height={468}
                   priority
-                  sizes="(min-width: 1024px) 448px, 0px"
+                  sizes="(min-width: 1024px) 448px, (min-width: 640px) 384px, 288px"
                   style={{
                     // The source is a bust crop, so its lower edge is a hard cut.
                     // Fading it out is what makes it read as lighting, not as a
