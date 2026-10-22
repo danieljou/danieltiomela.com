@@ -24,8 +24,8 @@ function supportsWebGL() {
  * existing portrait and its decorative rings  never replacing them.
  *
  * Never in the initial bundle (dynamic import, ssr:false) and never even
- * requested unless it would actually be shown well: desktop width, WebGL
- * available, and motion allowed. Any of those failing leaves the rings
+ * requested unless it would actually be shown well: WebGL available and
+ * motion allowed, on phones as well as desktop. Any of those failing leaves the rings
  * exactly as they were before this component existed  there is no broken
  * or empty state, only the fallback that was already there.
  *
@@ -33,7 +33,7 @@ function supportsWebGL() {
  * @react-three/fiber, drei deliberately not used) is ~234KB gzip, over the
  * house target of +150KB. That's three.js's own baseline engine cost, not a
  * missed optimisation  removing drei only recovered ~5KB. Accepted as-is:
- * the cost is scoped to desktop visitors without `prefers-reduced-motion`,
+ * the cost is scoped to visitors without `prefers-reduced-motion`,
  * on this one route, loaded after `load` and never blocking LCP or causing
  * CLS (both verified). Re-measure if this scene grows.
  */
@@ -51,8 +51,7 @@ export function HeroScene() {
       const reduceMotion = window.matchMedia(
         "(prefers-reduced-motion: reduce)",
       ).matches;
-      const isDesktop = window.matchMedia("(min-width: 1024px)").matches;
-      setEligible(!reduceMotion && isDesktop && supportsWebGL());
+      setEligible(!reduceMotion && supportsWebGL());
     });
     return () => cancelAnimationFrame(raf);
   }, []);
@@ -75,7 +74,7 @@ export function HeroScene() {
   if (!eligible) return null;
 
   return (
-    <div ref={containerRef} aria-hidden="true" className="absolute -inset-x-28 -inset-y-20 [&>div]:!pointer-events-auto">
+    <div ref={containerRef} aria-hidden="true" className="absolute -inset-x-10 -inset-y-12 lg:-inset-x-28 lg:-inset-y-20 [&>div]:!pointer-events-auto">
       <HeroSceneCanvas active={active} />
     </div>
   );

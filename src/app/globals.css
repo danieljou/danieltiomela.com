@@ -370,6 +370,17 @@
     filter 400ms var(--ease-brand);
 }
 
+/* Phones: depth and tilt stay, but nothing shrinks or grows. */
+@media (max-width: 1023px) {
+  .js .reveal3d {
+    transform: perspective(1100px) translateY(calc((1 - var(--p)) * 48px))
+      rotateX(calc((1 - var(--p)) * 24deg));
+  }
+  .coverflow-card {
+    transform: translateX(var(--tx)) translateZ(var(--tz)) rotateY(var(--rot));
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .scene3d-stage,
   .layer {
