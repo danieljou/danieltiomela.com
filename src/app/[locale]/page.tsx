@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { getDictionary, isLocale, type Locale } from "@/lib/i18n";
 import { sortedProjects } from "@/content/projects";
 import { Hero } from "@/components/sections/Hero";
+import { Marquee } from "@/components/sections/Marquee";
 import { ImmersiveSection } from "@/components/three/ImmersiveSection";
 import { ProjectCard } from "@/components/sections/ProjectCard";
 import {
@@ -30,6 +31,7 @@ export default async function HomePage({
   return (
     <>
       <Hero locale={typed} dict={dict} />
+      <Marquee label={dict.stack.label} />
       <ImmersiveSection locale={typed} dict={dict} />
       <ReadyNow dict={dict} />
       <WhatIBuild dict={dict} />

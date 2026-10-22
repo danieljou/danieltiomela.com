@@ -1,8 +1,8 @@
 import Link from "next/link";
-import { Card } from "@/components/ui/Card";
+import { TiltCard } from "@/components/ui/TiltCard";
 import { Tag } from "@/components/ui/Tag";
 import { ProjectCover } from "@/components/sections/ProjectCover";
-import { Reveal } from "@/components/motion/Reveal";
+import { Reveal3D } from "@/components/motion/Reveal3D";
 import { cn } from "@/lib/utils";
 import type { Locale } from "@/lib/i18n";
 import type { Dictionary, Project } from "@/content/types";
@@ -29,8 +29,8 @@ export function ProjectCard({
   const href = `/${locale}/projects/${project.slug}`;
 
   return (
-    <Reveal delay={index * 60} className="h-full">
-    <Card
+    <Reveal3D delay={index * 40} className="h-full">
+    <TiltCard
       as="article"
       interactive
       className="group flex h-full flex-col gap-4 transition-shadow duration-200 hover:shadow-[0_8px_28px_rgba(34,211,238,0.12)]"
@@ -92,7 +92,7 @@ export function ProjectCard({
           →
         </span>
       </p>
-    </Card>
-    </Reveal>
+    </TiltCard>
+    </Reveal3D>
   );
 }

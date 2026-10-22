@@ -49,7 +49,7 @@ export const fr: Dictionary = {
   readyNow: {
     label: "Disponible maintenant",
     title: "Où je peux être utile tout de suite",
-    kicker: "Trois choses que j'ai réellement livrées en production, pas une liste de souhaits.",
+    kicker: "Six domaines que je peux prendre en charge de bout en bout, dès maintenant.",
     items: [
       {
         title: "Backend à l'échelle",
@@ -62,6 +62,18 @@ export const fr: Dictionary = {
       {
         title: "Déploiement & infrastructure",
         body: "Docker, Kubernetes et CI/CD GitLab de la préproduction à la production, jusqu'à la mise en place d'infrastructure sur site dans un datacenter national, pas seulement un cloud managé.",
+      },
+      {
+        title: "Applications web",
+        body: "Applications prêtes pour la production en React et Next.js : interfaces soignées, authentification, tableaux de bord et formulaires, posées sur de vrais modèles de données et branchées à des API robustes.",
+      },
+      {
+        title: "Développement de sites web",
+        body: "Sites rapides, responsives et bien référencés, en Next.js ou WordPress : de l'intégration du design jusqu'à la mise en ligne, avec la documentation pour que le client reste autonome.",
+      },
+      {
+        title: "Applications mobiles",
+        body: "Applications multiplateformes en Flutter ou React Native, connectées à votre API : une seule base de code pour iOS et Android, quand le produit a réellement besoin d'être dans une poche.",
       },
     ],
   },
@@ -254,6 +266,8 @@ export const fr: Dictionary = {
     kicker: "Récentes et vérifiables.",
     columns: { name: "Certification", provider: "Organisme", date: "Date" },
     viewAll: "Voir toutes mes certifications sur LinkedIn",
+    previous: "Certification précédente",
+    next: "Certification suivante",
     groups: [
       {
         title: "DevOps & Cloud",

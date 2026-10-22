@@ -96,12 +96,14 @@ function drawWeb(ctx: CanvasRenderingContext2D, rng: () => number, name: string,
     roundRect(ctx, x, cardY, cardW, 78, 10);
     ctx.fillStyle = PANEL_LIGHT;
     ctx.fill();
+    // The technology's own name, over a placeholder bar  never an invented
+    // figure; a screen mockup should not state numbers this project never reported.
     ctx.fillStyle = TEXT;
-    ctx.font = "bold 26px 'Inter', sans-serif";
-    ctx.fillText(`${Math.floor(rng() * 900 + 100)}${i === 1 ? "%" : ""}`, x + 16, cardY + 34);
-    ctx.fillStyle = MUTED;
-    ctx.font = "12px 'Inter', sans-serif";
-    ctx.fillText((labels[i % labels.length] ?? "Metric").slice(0, 18), x + 16, cardY + 58);
+    ctx.font = "bold 20px 'Inter', sans-serif";
+    ctx.fillText((labels[i % labels.length] ?? "Service").slice(0, 16), x + 16, cardY + 32);
+    ctx.fillStyle = i === 0 ? CYAN : BLUE_SOFT;
+    roundRect(ctx, x + 16, cardY + 50, 40 + rng() * 70, 8, 4);
+    ctx.fill();
   }
 
   // Chart panel

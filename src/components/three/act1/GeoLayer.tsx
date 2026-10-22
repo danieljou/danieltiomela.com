@@ -4,6 +4,7 @@ import { useMemo, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import { BufferGeometry, Float32BufferAttribute, type Group, type LineBasicMaterial } from "three";
 import type { RefObject } from "react";
+import { Glow } from "../shared/Glow";
 import { POINTS, stageT } from "./constants";
 
 const GRID_SIZE = 1.6;
@@ -65,8 +66,9 @@ export function GeoLayer({ progressRef }: { progressRef: RefObject<number> }) {
       </lineSegments>
       {DATA_POINTS.map((p, i) => (
         <mesh key={i} position={p}>
-          <sphereGeometry args={[0.05, 8, 8]} />
-          <meshBasicMaterial color="#22D3EE" transparent opacity={0.9} />
+          <sphereGeometry args={[0.05, 12, 12]} />
+          <meshBasicMaterial color="#67E8F9" />
+          <Glow color="#22D3EE" scale={0.5} opacity={0.8} />
         </mesh>
       ))}
     </group>

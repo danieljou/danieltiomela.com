@@ -2,9 +2,11 @@
 
 import { useRef } from "react";
 import { useFrame, type ThreeEvent } from "@react-three/fiber";
-import type { Group } from "three";
+import { BoxGeometry, EdgesGeometry, type Group } from "three";
 import type { RefObject } from "react";
 import { POINTS, stageT } from "./constants";
+
+const CONTAINER_EDGES = new EdgesGeometry(new BoxGeometry(0.3, 0.3, 0.3));
 
 /** Stage 05  the pull-back. Named containers, not decoration. */
 const CLUSTER_STAGE_T = stageT(4);
@@ -62,7 +64,16 @@ export function ClusterReveal({
           onPointerOut={handleOut}
         >
           <boxGeometry args={[0.3, 0.3, 0.3]} />
-          <meshBasicMaterial color="#2F6BFF" />
+          <meshStandardMaterial
+            color="#2F6BFF"
+            emissive="#2F6BFF"
+            emissiveIntensity={0.7}
+            roughness={0.3}
+            metalness={0.5}
+          />
+          <lineSegments geometry={CONTAINER_EDGES}>
+            <lineBasicMaterial color="#67E8F9" />
+          </lineSegments>
         </mesh>
       ))}
     </group>

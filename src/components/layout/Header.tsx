@@ -91,7 +91,7 @@ export function Header({ locale, dict }: { locale: Locale; dict: Dictionary }) {
 
         <nav
           aria-label={dict.nav.menu}
-          className="hidden items-center gap-1.5 md:flex"
+          className="hidden items-center gap-1 rounded-full border border-line bg-surface/60 p-1 backdrop-blur-md md:flex"
         >
           {links.map((l) => {
             const active = isActive(l.href, l.exact);
@@ -101,10 +101,10 @@ export function Header({ locale, dict }: { locale: Locale; dict: Dictionary }) {
                 href={l.href}
                 aria-current={active ? "page" : undefined}
                 className={cn(
-                  "flex items-center gap-2 rounded-md border px-3.5 py-2 text-sm transition-colors duration-200",
+                  "flex items-center gap-2 rounded-full px-3.5 py-2 text-sm transition-colors duration-200",
                   active
-                    ? "border-secondary/40 bg-secondary/6 text-text-strong"
-                    : "border-line text-muted hover:border-line-strong hover:text-text",
+                    ? "bg-secondary/12 text-text-strong shadow-[inset_0_0_0_1px_rgba(34,211,238,0.35)]"
+                    : "text-muted hover:bg-surface-2 hover:text-text",
                 )}
               >
                 {active && <Node className="size-1.5" />}

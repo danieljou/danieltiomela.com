@@ -2,45 +2,45 @@
 
 import { useRef } from "react";
 import { useFrame } from "@react-three/fiber";
-import { Mesh, Vector3 } from "three";
-import { POINTS } from "./constants";
+import type { Group } from "three";
+import { Glow } from "../shared/Glow";
+import { JOURNEY_CURVE } from "./constants";
+
+const PACKETS = 9;
 
 /**
- * One packet per edge, looping continuously while the act is in view  no
- * `invalidate()` call of its own; it rides the render loop that `Journey`
- * already keeps alive while `active`, per the section's frameloop="demand"
- * contract (see SystemJourneyCanvas).
+ * Packets riding the same curve the camera follows, so the eye is always
+ * carried forward with the traffic. No `invalidate()` of its own; it rides
+ * the render loop `Journey` keeps alive (see SystemJourneyCanvas).
  */
-function Packet({ from, to, offset }: { from: Vector3; to: Vector3; offset: number }) {
-  const ref = useRef<Mesh>(null);
+export function DataFlow() {
+  const refs = useRef<(Group | null)[]>([]);
 
   useFrame((state) => {
-    const mesh = ref.current;
-    if (!mesh) return;
-    const t = (state.clock.elapsedTime * 0.25 + offset) % 1;
-    mesh.position.lerpVectors(from, to, t);
-    const pulse = Math.sin(t * Math.PI);
-    mesh.scale.setScalar(0.5 + pulse * 0.6);
+    for (let i = 0; i < PACKETS; i++) {
+      const g = refs.current[i];
+      if (!g) continue;
+      const t = (state.clock.elapsedTime * 0.07 + i / PACKETS) % 1;
+      JOURNEY_CURVE.getPointAt(t, g.position);
+      g.scale.setScalar(0.7 + Math.sin(t * Math.PI) * 0.6);
+    }
   });
 
   return (
-    <mesh ref={ref}>
-      <sphereGeometry args={[0.045, 8, 8]} />
-      <meshBasicMaterial color="#67E8F9" />
-    </mesh>
-  );
-}
-
-export function DataFlow() {
-  return (
     <>
-      {POINTS.slice(0, -1).map((p, i) => (
-        <Packet
+      {Array.from({ length: PACKETS }, (_, i) => (
+        <group
           key={i}
-          from={new Vector3(...p)}
-          to={new Vector3(...POINTS[i + 1])}
-          offset={i * 0.2}
-        />
+          ref={(el) => {
+            refs.current[i] = el;
+          }}
+        >
+          <mesh>
+            <sphereGeometry args={[0.035, 10, 10]} />
+            <meshBasicMaterial color="#ffffff" />
+          </mesh>
+          <Glow color="#67E8F9" scale={0.45} opacity={0.9} />
+        </group>
       ))}
     </>
   );

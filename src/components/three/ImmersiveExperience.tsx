@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useScrollProgress } from "./useScrollProgress";
-import { ACT_BOUNDARIES, getActState } from "./actProgress";
+import { ACT_BOUNDARIES, TOTAL_VH, getActState } from "./actProgress";
 import { Act1Canvas } from "./act1/Act1Canvas";
 import { Act2Canvas } from "./act2/Act2Canvas";
 import { Act3Canvas } from "./act3/Act3Canvas";
@@ -30,6 +30,7 @@ const RAIL_KEYS = ["act1", "act2", "act3"] as const;
 export function ImmersiveExperience({ locale, dict }: { locale: Locale; dict: Dictionary }) {
   const im = dict.immersive;
   const sectionRef = useRef<HTMLElement>(null);
+  const barRef = useRef<HTMLDivElement>(null);
   const progress = useScrollProgress(sectionRef);
   const subProgressRef = useRef(0);
   const [activeAct, setActiveAct] = useState<0 | 1 | 2>(0);
@@ -51,6 +52,9 @@ export function ImmersiveExperience({ locale, dict }: { locale: Locale; dict: Di
     function update() {
       const state = getActState(progress.current);
       subProgressRef.current = state.subProgress;
+      // Written straight to the element: a per-scroll setState is the first
+      // cause of jank in a scroll-driven scene (see useScrollProgress).
+      if (barRef.current) barRef.current.style.transform = `scaleX(${progress.current})`;
       if (state.actIndex !== lastAct.current) {
         lastAct.current = state.actIndex;
         setActiveAct(state.actIndex);
@@ -81,26 +85,46 @@ export function ImmersiveExperience({ locale, dict }: { locale: Locale; dict: Di
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [progress]);
 
-  function jumpToAct(index: number) {
+  /** Scroll to a point inside an act: `sub` is 0-1 within that act. */
+  function jumpTo(act: number, sub = 0) {
     const section = sectionRef.current;
     if (!section) return;
     const rect = section.getBoundingClientRect();
     const sectionTop = rect.top + window.scrollY;
     const total = rect.height - window.innerHeight;
-    window.scrollTo({ top: sectionTop + ACT_BOUNDARIES[index] * total, behavior: "smooth" });
+    const start = ACT_BOUNDARIES[act];
+    const end = ACT_BOUNDARIES[act + 1];
+    window.scrollTo({ top: sectionTop + (start + sub * (end - start)) * total, behavior: "smooth" });
   }
+  const jumpToAct = (index: number) => jumpTo(index, 0);
 
   const stage = im.act1.stages[activeStage];
   const projectSlug = ORDERED_SLUGS[activeProject];
   const project = projectSlug ? getProject(projectSlug) : undefined;
   const projectCopy = project?.i18n[locale];
 
+  // Steps on the right edge: the stages of Act I, the projects of Act III.
+  const stepCount =
+    activeAct === 0 ? im.act1.stages.length : activeAct === 2 ? ORDERED_SLUGS.length : 0;
+  const stepActive = activeAct === 0 ? activeStage : activeProject;
+  const captionKey = `${activeAct}-${activeAct === 0 ? activeStage : activeAct === 2 ? activeProject : 0}`;
+
   return (
-    <section ref={sectionRef} className="relative h-[800vh] lg:h-[1600vh]">
+    <section
+      ref={sectionRef}
+      className="relative h-(--h-m) lg:h-(--h-d)"
+      style={{ "--h-m": `${TOTAL_VH / 2}vh`, "--h-d": `${TOTAL_VH}vh` } as React.CSSProperties}
+    >
       <div className="sticky top-0 h-dvh overflow-hidden">
         <div className="absolute inset-0">
           {activeAct === 0 && (
-            <Act1Canvas active progress={subProgressRef} onHover={setHoverLabel} />
+            <Act1Canvas
+              active
+              progress={subProgressRef}
+              onHover={setHoverLabel}
+              stageLabels={im.act1.stages.map((s) => s.title)}
+              onSelectStage={(i) => jumpTo(0, i / (im.act1.stages.length - 1))}
+            />
           )}
           {activeAct === 1 && (
             <Act2Canvas
@@ -116,56 +140,115 @@ export function ImmersiveExperience({ locale, dict }: { locale: Locale; dict: Di
               locale={locale}
               progress={subProgressRef}
               onHover={setHoverLabel}
+              onSelect={(i) => jumpTo(2, i / (ORDERED_SLUGS.length - 1))}
             />
           )}
         </div>
+
+        {/* Legibility: the caption sits on a soft floor of the page colour, and
+            the header zone on a soft ceiling, so text never fights the scene. */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-2/5 bg-linear-to-t from-bg via-bg/55 to-transparent"
+        />
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-x-0 top-0 z-10 h-32 bg-linear-to-b from-bg/80 to-transparent"
+        />
 
         {/* Jump nav  real buttons, not scroll-hijacked: each one is a
             plain scrollTo, so keyboard and screen-reader users can still
             reach every act even though the canvas itself is decorative. */}
         <nav
           aria-label={im.progressLabel}
-          className="absolute inset-x-0 top-16 z-20 flex justify-center gap-2 px-4 sm:top-20"
+          className="pointer-events-none absolute inset-x-0 top-16 z-20 flex justify-center px-4 sm:top-20"
         >
-          {RAIL_KEYS.map((key, i) => (
-            <button
-              key={key}
-              type="button"
-              onClick={() => jumpToAct(i)}
-              aria-current={activeAct === i ? "true" : undefined}
-              className={cn(
-                "inline-flex min-h-11 items-center gap-2 whitespace-nowrap rounded-full border px-4 text-sm backdrop-blur-sm transition-colors duration-200",
-                activeAct === i
-                  ? "border-secondary/50 bg-bg/70 text-secondary-text"
-                  : "border-line bg-bg/50 text-muted hover:text-text",
-              )}
-            >
-              <span className="font-mono text-xs tabular-nums" aria-hidden="true">
-                {String(i + 1).padStart(2, "0")}
-              </span>
-              {im.rail[key]}
-            </button>
-          ))}
+          <div className="pointer-events-auto flex gap-1 rounded-full border border-line bg-bg/60 p-1 backdrop-blur-md">
+            {RAIL_KEYS.map((key, i) => (
+              <button
+                key={key}
+                type="button"
+                onClick={() => jumpToAct(i)}
+                aria-current={activeAct === i ? "true" : undefined}
+                className={cn(
+                  "inline-flex min-h-11 items-center gap-2 whitespace-nowrap rounded-full px-4 text-sm transition-[color,background-color,box-shadow] duration-200",
+                  activeAct === i
+                    ? "bg-secondary/12 text-text-strong shadow-[inset_0_0_0_1px_rgba(34,211,238,0.4)]"
+                    : "text-muted hover:bg-surface-2/70 hover:text-text",
+                )}
+              >
+                <span className="font-mono text-xs tabular-nums text-secondary-text" aria-hidden="true">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                {im.rail[key]}
+              </button>
+            ))}
+          </div>
         </nav>
+
+        {/* What the pointer is on, named. Acts II and III already say it in the
+            caption; Act I has no other place for it. */}
+        {activeAct === 0 && hoverLabel && (
+          <p
+            aria-hidden="true"
+            className="animate-fade-up pointer-events-none absolute left-1/2 top-36 z-20 -translate-x-1/2 rounded-full border border-secondary/40 bg-bg/80 px-4 py-2 font-mono text-xs text-secondary-text backdrop-blur-md"
+          >
+            {hoverLabel}
+          </p>
+        )}
+
+        {/* Steps within the act  where you are, not a control. */}
+        {stepCount > 0 && (
+          <ol
+            aria-hidden="true"
+            className="absolute right-4 top-1/2 z-20 hidden -translate-y-1/2 flex-col items-center gap-3 sm:flex lg:right-8"
+          >
+            {Array.from({ length: stepCount }, (_, i) => (
+              <li
+                key={i}
+                className={cn(
+                  "w-1 rounded-full transition-[height,background-color,box-shadow] duration-300 ease-brand",
+                  i === stepActive
+                    ? "h-8 bg-secondary shadow-[0_0_12px_rgba(34,211,238,0.7)]"
+                    : i < stepActive
+                      ? "h-3 bg-primary-text/70"
+                      : "h-3 bg-line-strong",
+                )}
+              />
+            ))}
+          </ol>
+        )}
 
         {/* Overlay text  the only content a mouse/trackpad visitor reads
             here; keyboard and screen-reader visitors get the full version
             in StagePanels once this experience isn't the one rendered. */}
-        <div className="absolute inset-x-0 bottom-0 z-20 p-6 sm:p-10">
-          <div className="mx-auto max-w-xl rounded-xl border border-line bg-bg/85 p-6 backdrop-blur-md">
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 px-5 pb-8 sm:px-10 sm:pb-12 lg:px-16">
+          <div
+            key={captionKey}
+            className="animate-fade-up pointer-events-auto max-w-xl rounded-xl border border-line-strong/70 bg-bg/70 p-6 shadow-photo backdrop-blur-xl sm:p-7"
+          >
             {activeAct === 0 && stage && (
-              <>
-                <p className="font-mono text-xs tabular-nums text-primary-text">{stage.number}</p>
-                <h2 className="mt-2 font-display text-2xl font-bold">{stage.title}</h2>
-                <p className="mt-2 text-[15px] leading-relaxed text-muted">{stage.body}</p>
-                <ul className="mt-3 flex flex-wrap gap-1.5">
-                  {stage.tech.map((t) => (
-                    <li key={t}>
-                      <Tag size="sm">{t}</Tag>
-                    </li>
-                  ))}
-                </ul>
-              </>
+              <div className="flex gap-5">
+                <p
+                  aria-hidden="true"
+                  className="font-display text-5xl font-bold leading-none tabular-nums grad-text sm:text-6xl"
+                >
+                  {stage.number}
+                </p>
+                <div className="min-w-0">
+                  <h2 className="font-display text-2xl font-bold">{stage.title}</h2>
+                  <p className="mt-2 text-[15px] leading-relaxed text-muted">{stage.body}</p>
+                  <ul className="mt-4 flex flex-wrap gap-1.5">
+                    {stage.tech.map((t) => (
+                      <li key={t}>
+                        <Tag size="sm" tone="active">
+                          {t}
+                        </Tag>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
             )}
             {activeAct === 1 && (
               <>
@@ -176,22 +259,39 @@ export function ImmersiveExperience({ locale, dict }: { locale: Locale; dict: Di
               </>
             )}
             {activeAct === 2 && (
-              <>
-                <p className="font-mono text-xs tabular-nums text-primary-text">
-                  {String(activeProject + 1).padStart(2, "0")} / {String(ORDERED_SLUGS.length).padStart(2, "0")}
+              <div className="flex gap-5">
+                <p
+                  aria-hidden="true"
+                  className="font-display text-5xl font-bold leading-none tabular-nums grad-text sm:text-6xl"
+                >
+                  {String(activeProject + 1).padStart(2, "0")}
                 </p>
-                <h2 className="mt-2 font-display text-2xl font-bold">
-                  {projectCopy?.name ?? im.act3.title}
-                </h2>
-                <p className="mt-2 text-[15px] leading-relaxed text-muted">
-                  {hoverLabel ??
-                    (projectCopy
-                      ? `${project?.year} · ${project?.role} — ${projectCopy.tagline}`
-                      : im.act3.intro)}
-                </p>
-              </>
+                <div className="min-w-0">
+                  <h2 className="font-display text-2xl font-bold">
+                    {projectCopy?.name ?? im.act3.title}
+                  </h2>
+                  <p className="mt-2 text-[15px] leading-relaxed text-muted">
+                    {hoverLabel ??
+                      (projectCopy
+                        ? `${project?.year} · ${project?.role} — ${projectCopy.tagline}`
+                        : im.act3.intro)}
+                  </p>
+                </div>
+              </div>
             )}
           </div>
+        </div>
+
+        {/* Overall progress through the three acts. */}
+        <div
+          aria-hidden="true"
+          className="absolute inset-x-0 bottom-0 z-30 h-0.5 bg-line/60"
+        >
+          <div
+            ref={barRef}
+            className="h-full origin-left bg-linear-to-r from-primary to-secondary"
+            style={{ transform: "scaleX(0)" }}
+          />
         </div>
       </div>
     </section>

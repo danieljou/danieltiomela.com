@@ -27,6 +27,22 @@ export function timelineZ(t: number) {
   return DEPTH_SPAN / 2 - frac * DEPTH_SPAN;
 }
 
+/**
+ * The helix the projects wind around: oldest at the bottom, newest on top.
+ * Spacing is by order, not by date  dates are in each project's caption;
+ * even spacing is what lets the camera give every project its own beat.
+ */
+export const HELIX = { radius: 2.6, turn: 0.88, rise: 0.82, phase: 0.35 };
+
+export function helixAngle(i: number) {
+  return i * HELIX.turn + HELIX.phase;
+}
+
+export function helixPoint(i: number): [number, number, number] {
+  const a = helixAngle(i);
+  return [Math.cos(a) * HELIX.radius, i * HELIX.rise, Math.sin(a) * HELIX.radius];
+}
+
 /** Chronological order  object key order matches insertion order here, which is already oldest-first. */
 export const ORDERED_SLUGS = Object.keys(ACT3_LAYOUT);
 

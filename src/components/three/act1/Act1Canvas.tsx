@@ -17,14 +17,24 @@ export function Act1Canvas({
   active,
   progress,
   onHover,
+  stageLabels,
+  onSelectStage,
 }: {
   active: boolean;
   progress: RefObject<number>;
   onHover: (label: string | null) => void;
+  stageLabels: string[];
+  onSelectStage: (index: number) => void;
 }) {
   return (
     <div className="absolute inset-0">
-      <SystemJourneyCanvas progressRef={progress} active={active} onHover={onHover} />
+      <SystemJourneyCanvas
+        progressRef={progress}
+        active={active}
+        onHover={onHover}
+        stageLabels={stageLabels}
+        onSelectStage={onSelectStage}
+      />
     </div>
   );
 }

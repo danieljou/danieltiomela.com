@@ -39,7 +39,8 @@ export function SectionHeader({
   return (
     <header className={cn("max-w-3xl", className)}>
       {label && (
-        <p className="font-mono text-xs uppercase tracking-[0.2em] text-secondary-text">
+        <p className="flex items-center gap-3 font-mono text-xs uppercase tracking-[0.2em] text-secondary-text">
+          <span aria-hidden="true" className="h-px w-8 grad-brand" />
           {label}
         </p>
       )}

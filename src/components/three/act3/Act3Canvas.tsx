@@ -16,15 +16,23 @@ export function Act3Canvas({
   locale,
   progress,
   onHover,
+  onSelect,
 }: {
   active: boolean;
   locale: Locale;
   progress: RefObject<number>;
   onHover: (label: string | null) => void;
+  onSelect: (index: number) => void;
 }) {
   return (
     <div className="absolute inset-0">
-      <OrbitCanvas active={active} locale={locale} progress={progress} onHover={onHover} />
+      <OrbitCanvas
+        active={active}
+        locale={locale}
+        progress={progress}
+        onHover={onHover}
+        onSelect={onSelect}
+      />
     </div>
   );
 }

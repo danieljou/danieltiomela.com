@@ -1,4 +1,4 @@
-import { CanvasTexture } from "three";
+import { CanvasTexture, SRGBColorSpace } from "three";
 
 /**
  * Very rough continent silhouettes  [lon, lat] point lists, not real
@@ -40,57 +40,95 @@ const CONTINENTS: [number, number][][] = [
   ],
 ];
 
+const WIDTH = 2048;
+const HEIGHT = 1024;
+
 /** Equirectangular projection  matches `SphereGeometry`'s default UV layout. */
-function project(lon: number, lat: number, width: number, height: number) {
-  return [((lon + 180) / 360) * width, ((90 - lat) / 180) * height];
+function project(lon: number, lat: number) {
+  return [((lon + 180) / 360) * WIDTH, ((90 - lat) / 180) * HEIGHT];
 }
 
+/**
+ * A halftone globe: land is a field of dots, sea is near-black. Because the
+ * silhouettes above are approximate, dots hide that better than a solid fill
+ * would  it reads as a deliberate data-globe style, not a coarse map. Dot
+ * spacing is corrected by cos(latitude) so density stays even on the sphere.
+ */
 export function createEarthTexture() {
-  const width = 1024;
-  const height = 512;
   const canvas = document.createElement("canvas");
-  canvas.width = width;
-  canvas.height = height;
+  canvas.width = WIDTH;
+  canvas.height = HEIGHT;
   const ctx = canvas.getContext("2d");
   if (!ctx) return null;
 
-  ctx.fillStyle = "#0a1122";
-  ctx.fillRect(0, 0, width, height);
-
-  ctx.fillStyle = "#2f6bff";
-  ctx.strokeStyle = "#4c86ff";
-  ctx.lineWidth = 1.5;
+  // Land mask, offscreen.
+  const mask = document.createElement("canvas");
+  mask.width = WIDTH;
+  mask.height = HEIGHT;
+  const mctx = mask.getContext("2d", { willReadFrequently: true });
+  if (!mctx) return null;
+  mctx.fillStyle = "#fff";
   for (const poly of CONTINENTS) {
-    ctx.beginPath();
+    mctx.beginPath();
     poly.forEach(([lon, lat], i) => {
-      const [x, y] = project(lon, lat, width, height);
-      if (i === 0) ctx.moveTo(x, y);
-      else ctx.lineTo(x, y);
+      const [x, y] = project(lon, lat);
+      if (i === 0) mctx.moveTo(x, y);
+      else mctx.lineTo(x, y);
     });
-    ctx.closePath();
-    ctx.fill();
-    ctx.stroke();
+    mctx.closePath();
+    mctx.fill();
   }
+  const data = mctx.getImageData(0, 0, WIDTH, HEIGHT).data;
+  const isLand = (x: number, y: number) => {
+    const ix = Math.min(WIDTH - 1, Math.max(0, Math.round(x)));
+    const iy = Math.min(HEIGHT - 1, Math.max(0, Math.round(y)));
+    return data[(iy * WIDTH + ix) * 4] > 128;
+  };
 
-  // Graticule  the tech/brand touch on top of the geography.
-  ctx.strokeStyle = "rgba(34, 211, 238, 0.12)";
-  ctx.lineWidth = 1;
-  for (let lon = -180; lon <= 180; lon += 30) {
-    const [x] = project(lon, 0, width, height);
+  // Sea: a deep blue with a faint vertical falloff toward the poles.
+  const sea = ctx.createLinearGradient(0, 0, 0, HEIGHT);
+  sea.addColorStop(0, "#0b1a38");
+  sea.addColorStop(0.5, "#0d2148");
+  sea.addColorStop(1, "#0b1a38");
+  ctx.fillStyle = sea;
+  ctx.fillRect(0, 0, WIDTH, HEIGHT);
+
+  // Graticule.
+  ctx.strokeStyle = "rgba(76, 134, 255, 0.16)";
+  ctx.lineWidth = 1.2;
+  for (let lon = -180; lon <= 180; lon += 15) {
+    const [x] = project(lon, 0);
     ctx.beginPath();
     ctx.moveTo(x, 0);
-    ctx.lineTo(x, height);
+    ctx.lineTo(x, HEIGHT);
     ctx.stroke();
   }
-  for (let lat = -60; lat <= 60; lat += 30) {
-    const [, y] = project(0, lat, width, height);
+  for (let lat = -75; lat <= 75; lat += 15) {
+    const [, y] = project(0, lat);
     ctx.beginPath();
     ctx.moveTo(0, y);
-    ctx.lineTo(width, y);
+    ctx.lineTo(WIDTH, y);
     ctx.stroke();
+  }
+
+  // Land dots.
+  const rowStep = 1.7; // degrees of latitude between rows
+  for (let lat = -80; lat <= 80; lat += rowStep) {
+    const colStep = rowStep / Math.max(0.2, Math.cos((lat * Math.PI) / 180));
+    for (let lon = -180; lon < 180; lon += colStep) {
+      const [x, y] = project(lon, lat);
+      if (!isLand(x, y)) continue;
+      const shade = 0.55 + 0.45 * Math.abs(Math.sin(lon * 0.37 + lat * 0.21));
+      ctx.fillStyle = `rgba(103, 232, 249, ${shade.toFixed(2)})`;
+      ctx.beginPath();
+      ctx.arc(x, y, 1.7, 0, Math.PI * 2);
+      ctx.fill();
+    }
   }
 
   const texture = new CanvasTexture(canvas);
+  texture.colorSpace = SRGBColorSpace;
+  texture.anisotropy = 8;
   texture.needsUpdate = true;
   return texture;
 }

@@ -156,6 +156,8 @@ export interface Dictionary {
     kicker: string;
     columns: { name: string; provider: string; date: string };
     viewAll: string;
+    previous: string;
+    next: string;
     /** Grouped the way the CV itself groups them  never re-sorted flat. */
     groups: {
       title: string;

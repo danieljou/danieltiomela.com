@@ -8,8 +8,8 @@
  * textured globe with an atmosphere and a starfield deserves more than a
  * rushed pass-through.
  */
-export const ACT_VH = { act1: 500, act2: 400, act3: 700 };
-const TOTAL_VH = ACT_VH.act1 + ACT_VH.act2 + ACT_VH.act3;
+export const ACT_VH = { act1: 500, act2: 220, act3: 700 };
+export const TOTAL_VH = ACT_VH.act1 + ACT_VH.act2 + ACT_VH.act3;
 
 export const ACT_BOUNDARIES = [
   0,

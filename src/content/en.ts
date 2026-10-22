@@ -49,7 +49,7 @@ export const en: Dictionary = {
   readyNow: {
     label: "Ready now",
     title: "Where I can help immediately",
-    kicker: "Three things I've actually shipped in production, not a wishlist.",
+    kicker: "Six areas I can own end to end, starting now.",
     items: [
       {
         title: "Backend systems at scale",
@@ -62,6 +62,18 @@ export const en: Dictionary = {
       {
         title: "Deployment & infrastructure",
         body: "Docker, Kubernetes and GitLab CI/CD from preproduction through production, including standing up infrastructure on-site in a national datacenter, not just a managed cloud.",
+      },
+      {
+        title: "Web applications",
+        body: "Production-ready applications in React and Next.js: polished interfaces, authentication, dashboards and forms, built on real data models and wired to solid APIs.",
+      },
+      {
+        title: "Website development",
+        body: "Fast, responsive, search-friendly websites in Next.js or WordPress: from design hand-off to going live, with the documentation that keeps the client self-sufficient.",
+      },
+      {
+        title: "Mobile applications",
+        body: "Cross-platform apps in Flutter or React Native, connected to your API: one codebase for iOS and Android, when the product genuinely needs to live in a pocket.",
       },
     ],
   },
@@ -254,6 +266,8 @@ export const en: Dictionary = {
     kicker: "Recent and verifiable.",
     columns: { name: "Certification", provider: "Provider", date: "Date" },
     viewAll: "View all certifications on LinkedIn",
+    previous: "Previous certification",
+    next: "Next certification",
     groups: [
       {
         title: "DevOps & Cloud",

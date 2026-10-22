@@ -75,7 +75,7 @@ export function HeroScene() {
   if (!eligible) return null;
 
   return (
-    <div ref={containerRef} aria-hidden="true" className="absolute inset-0">
+    <div ref={containerRef} aria-hidden="true" className="absolute -inset-x-28 -inset-y-20 [&>div]:!pointer-events-auto">
       <HeroSceneCanvas active={active} />
     </div>
   );
